@@ -1,0 +1,205 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+	<title>Guosen.MarginStocksProvider-国信证券TradeStation帮助文档</title>
+    <script type="text/javascript" src="scripts/shCore.js"></script>
+	<script type="text/javascript" src="scripts/shBrushEL.js"></script>
+	<link type="text/css" rel="stylesheet" href="styles/shCoreDefault.css"/>
+    <script type="text/javascript">SyntaxHighlighter.all();</script>
+	<link href="styles.css" rel=stylesheet type="text/css">
+</head>
+<body>
+<div style="width:1000px;margin: 0 auto;">
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" bgcolor="#0062a6">
+  <tr>
+    <td width=5 height=5><IMG src="images/tmenu/lt.gif" width=5 height=5></td>
+    <td></td>
+    <td><IMG src="images/tmenu/rt.gif" width=5 height=5></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td valign="middle"><table width="100%"  border="0" cellspacing="0" cellpadding="5">
+      <tr valign="middle">
+        <td style="COLOR: #ffffff"><p style="COLOR: #ffffff; TEXT-ALIGN: justify; MARGIN-TOP: 0px">Guosen.MarginStocksProvider</p></td>
+				<td width="70" align="right">
+				<A href="#"><IMG border=0 alt=上一页 src="images/previous.gif" width=17 height=17></a>
+				&nbsp; &nbsp;
+				<A href="#"><IMG border=0 alt=下一页 src="images/next.gif" width=17 height=17></a>
+				</td>
+      </tr>
+    </table></td>
+    <td width=5></td>
+  </tr>
+  <tr>
+    <td width=5 height=5><IMG src="images/tmenu/lb.gif" width=5 height=5></td>
+    <td></td>
+    <td width=5 height=5><IMG src="images/tmenu/rb.gif" width=5 height=5></td>
+  </tr>
+</table>
+<div class=longtext>
+<h1>MarginStocksProvider 类</h1>
+<pre>用于访问相关账户的融券列表信息。</pre>
+<p><span style="font-weight: bold;" >命名空间</span>：guosen</p>
+<h2>属性</h2>
+<table border=1 cellpadding=5 cellspacing=0 width="100%">
+<tr bgcolor="#c0c0c0">
+	<td width="200" valign="top" align="center"><b>名称</b></td>
+    <td width="200" valign="top" align="center"><b>类型</b></td>
+	<td valign="top"><b>说明</b>
+	</td>
+</tr>
+<!--属性第一行开始-->
+<tr>
+	<td width="100" valign="top" align="left"><b>Account</b></td>
+    <td width="100" valign="top" align="left"><b>string</b></td>
+	<td valign="top" >筛选需要列出您想要查询列表的某个账户。默认为全部信用账号。</td>
+</tr>
+<!--属性第一行结束-->
+
+<tr>
+	<td width="100" valign="top" align="left"><b>Count</b></td>
+	<td width="100" valign="top" align="left"><b>int</b></td>
+	<td valign="top" >基于筛选条件的现有仓位的数目。</td>
+</tr>
+
+<tr>
+	<td width="100" valign="top" align="left"><b>Data[index]</b></td>
+    <td width="100" valign="top" align="left"><b>Object</b></td>
+	<td valign="top" >基于下标返回特定的Data。</td>
+</tr>
+
+<tr>
+	<td width="100" valign="top" align="left"><b>DataID</b></td>
+    <td width="100" valign="top" align="left"><b>String</b></td>
+	<td valign="top" >返回Data数据的类型。</td>
+</tr>
+
+<!--
+<tr>
+	<td width="100" valign="top" align="left"><b>Filter</b></td>
+    <td width="100" valign="top" align="left"><b>DynamicProperties</b></td>
+	<td valign="top" >程序体不存在</td>
+</tr>
+-->
+<tr>
+	<td width="100" valign="top" align="left"><b>Load</b></td>
+    <td width="100" valign="top" align="left"><b>bool</b></td>
+	<td valign="top" >设置为 true，以建立与数据提供程序的连接。</td>
+</tr>
+
+<tr>
+	<td width="100" valign="top" align="left"><b>MarginStock[index]</b></td>
+    <td width="100" valign="top" align="left"><b>Object</b></td>
+	<td valign="top" >获取与指定索引关联的<b>MarginStock</b>对象。</td>
+</tr>
+
+<tr>
+	<td width="100" valign="top" align="left"><b>RealTime</b></td>
+    <td width="100" valign="top" align="left"><b>bool</b></td>
+	<td valign="top" >如果所提供数据是实时数据则为 true。如果不是实时数据，则为 false。</td>
+</tr>
+
+<tr>
+	<td width="100" valign="top" align="left"><b>State</b></td>
+    <td width="100" valign="top" align="left"><b>enum</b></td>
+	<td valign="top" >获取的数据提供程序的状态。有关可能值的列表，请参阅 <a href="http://help.tradestationchina.com.cn/09_05/guosen/chs/tsdevhelp/Subsystems/elobject/enumeration/datastate_enumeration.htm">DataState</A></SPAN></SPAN>。</td>
+</tr>
+
+<tr>
+	<td width="100" valign="top" align="left"><b>TimeZone</b></td>
+    <td width="100" valign="top" align="left"><b>enum</b></td>
+	<td valign="top" >获取 TimeZone 对象。本地 = 0，交易所 = 1。请参阅 <A href="http://help.tradestationchina.com.cn/09_05/guosen/chs/tsdevhelp/Subsystems/elobject/enumeration/timezone_enumeration.htm" xmlns="http://www.w3.org/1999/xhtml">TimeZone</A> 对象。</td>
+</tr>
+
+<tr>
+	<td width="100" valign="top" align="left"><b>TryMarginStock</b></td>
+    <td width="100" valign="top" align="left">&nbsp;</td>
+	<td valign="top" >程序体不存在</td>
+</tr>
+
+</table>
+
+
+<h2>方法</h2>
+<table border=1 cellpadding=5 cellspacing=0 width="100%">
+<tr bgcolor="#c0c0c0">
+	<td width="100" valign="top" align="center"><b>名称</b></td>
+    <td width="100" valign="top" align="center"><b>返回值</b></td>
+	<td valign="top"><b>说明</b>
+	</td>
+</tr>
+
+<!--方法第一行开始-->
+<tr>
+	<td width="100" valign="top" align="left"><b>Clone</b></td>
+	<td width="100" valign="top" align="left">&nbsp;</td>
+	<td valign="top" >类的克隆实例。</td>
+</tr>
+<!--方法第一行结束-->
+
+<tr>
+	<td width="100" valign="top" align="left">CloseProvider</td>
+	<td width="100" valign="top" align="left">&nbsp;</td>
+	<td valign="top" >关闭与 DataProvider 的连接。</td>
+</tr>
+<tr>
+	<td width="100" valign="top" align="left">Contains(symbol)</td>
+	<td width="100" valign="top" align="left"><b>bool</b></td>
+	<td valign="top" >如果指定 Symbol 包含在提供程序中，则为 true。</td>
+</tr>
+<tr>
+	<td width="100" valign="top" align="left">Equals</td>
+	<td width="100" valign="top" align="left"><b>bool</b></td>
+	<td valign="top" >如果指定的帐户 ID 字符串包含在当前实例中，则为 true。</td>
+</tr>    
+<tr>
+	<td width="100" valign="top" align="left">GetType</td>
+	<td width="100" valign="top" align="left"><b>bool</b></td>
+	<td valign="top" >如果指定的帐户 ID 字符串包含在当前实例中，则为 true。</td> 
+</tr>
+<tr>
+	<td width="100" valign="top" align="left">LoadProvider</td>
+	<td width="100" valign="top" align="left">&nbsp;</td>
+	<td valign="top" >打开与 DataProvider 的连接。</td> 
+</tr>
+</table>
+
+<h2>事件</h2>
+<table border=1 cellpadding=5 cellspacing=0 width="100%">
+<tr bgcolor="#c0c0c0">
+	<td width="100" valign="top" align="center"><b>名称</b></td>
+	<td valign="top"><b>说明</b>
+	</td>
+</tr>
+
+<!--事件第一行开始-->
+<tr>
+	<td width="100" valign="top" align="left"><b>StateChanged</b></td>
+	<td valign="top" >当提供程序状态更改时，此事件发生。有关处理程序 args 参数返回的属性，请参阅 <A href="http://help.tradestationchina.com.cn/09_05/guosen/chs/tsdevhelp/Subsystems/elobject/class/statechangedeventargs_class.htm" xmlns="http://www.w3.org/1999/xhtml">StateChangedEventArgs</A>。</td>
+</tr>
+<!--事件第一行结束-->
+
+<tr>
+	<td width="100" valign="top" align="left"><b>Updated</b></td>
+	<td valign="top" >融券列表更新时，发生此事件。有关处理程序 args 参数返回的属性，请参阅 MarginStockUpdatedEventArgs。</td>
+</tr>
+
+</table>
+<!--
+<h2>示例</h2>
+<pre class="brush: EasyLanguage;">&nbsp;
+
+</pre>
+-->
+<h2>附件</h2>
+
+<pre>无
+</pre>
+</div>
+
+<div>
+	<p align="left">Copyright 1998-2016 国信证券股份有限公司 版权所有</p>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+	<title>如何调取指定时间段的最高价？-行情调取-国信证券TradeStation帮助文档</title>
+    <script type="text/javascript" src="../scripts/shCore.js"></script>
+	<script type="text/javascript" src="../scripts/shBrushEL.js"></script>
+	<link type="text/css" rel="stylesheet" href="../styles/shCoreDefault.css"/>
+    <script type="text/javascript">SyntaxHighlighter.all();</script>
+	<link href="styles.css" rel=stylesheet type="text/css">
+</head>
+<body>
+<div style="width:1000px;margin: 0 auto;">
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" bgcolor="#0062a6">
+  <tr>
+    <td width=5 height=5><IMG src="images/tmenu/lt.gif" width=5 height=5></td>
+    <td></td>
+    <td><IMG src="images/tmenu/rt.gif" width=5 height=5></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td valign="middle"><table width="100%"  border="0" cellspacing="0" cellpadding="5">
+      <tr valign="middle">
+        <td style="COLOR: #ffffff"><p style="COLOR: #ffffff; TEXT-ALIGN: justify; MARGIN-TOP: 0px">行情调取</p></td>
+				<td width="70" align="right">
+				<A href="#"><IMG border=0 alt=上一页 src="../images/previous.gif" width=17 height=17></a>
+				&nbsp; &nbsp;
+				<A href="#"><IMG border=0 alt=下一页 src="../images/next.gif" width=17 height=17></a>
+				</td>
+      </tr>
+    </table></td>
+    <td width=5></td>
+  </tr>
+  <tr>
+    <td width=5 height=5><IMG src="images/tmenu/lb.gif" width=5 height=5></td>
+    <td></td>
+    <td width=5 height=5><IMG src="images/tmenu/rb.gif" width=5 height=5></td>
+  </tr>
+</table>
+<div class=longtext>
+<h1>如何调取指定时间段的最高价？</h1>
+<pre>&nbsp;</pre>
+
+<div width=50%>
+
+<h2>1.雷达屏或图形分析</h2>
+<p>
+	在雷达屏中或图形分析中，如果想要获得当前代码的规则周期。
+</p>
+
+</div>
+
+
+<h2>示例1:使用QuotesProvider获得涨停价或跌停价</h2>
+<pre class="brush: EasyLanguage;">
+using guosen;
+using tsdata.common;
+using tsdata.marketdata;
+
+
+vars:QuotesProvider QP(null);
+method void AnalysisTechnique_Initialized( elsystem.Object sender, elsystem.InitializedEventArgs args ) 
+begin
+	QP = new QuotesProvider;
+	QP.Load = false;
+	QP.Symbol = "000001.SZ";//设置股票代码
+	QP.fields += "highLimit,LowLimit";//属性可增可减，不区分大小写，但需用逗号分隔开来
+	QP.Updated += QP_Updated; //为QuotesProvider绑定更新事件 
+	QP.Load = true;         
+end;
+
+Method void QP_Updated(elsystem.Object sender,tsdata.marketdata.QuoteUpdatedEventArgs args)
+Begin
+	if(QP.State=DataState.loaded)then
+	Begin
+		Print("HighLimit: "+ numtostr(QP.Quote["HighLimit"].Int64Value,0) + //代码名称
+			 " LowLimit:" + numtostr(QP.Quote["HighLimit"].Int64Value,0)  //最新价
+			 );
+	End;
+End;
+//打印语句输出栏结果示例：HighLimit: 100900 LowLimit:100900
+
+</pre>
+
+<h2>附件</h2>
+
+<pre>无
+</pre>
+</div>
+
+<div>
+	<p align="left">Copyright  1998-2016 国信证券股份有限公司 版权所有</p>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+	<title>如何获得最新成交价？-行情调取-国信证券TradeStation帮助文档</title>
+    <script type="text/javascript" src="../scripts/shCore.js"></script>
+	<script type="text/javascript" src="../scripts/shBrushEL.js"></script>
+	<link type="text/css" rel="stylesheet" href="../styles/shCoreDefault.css"/>
+    <script type="text/javascript">SyntaxHighlighter.all();</script>
+	<link href="styles.css" rel=stylesheet type="text/css">
+</head>
+<body>
+<div style="width:1000px;margin: 0 auto;">
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" bgcolor="#0062a6">
+  <tr>
+    <td width=5 height=5><IMG src="images/tmenu/lt.gif" width=5 height=5></td>
+    <td></td>
+    <td><IMG src="images/tmenu/rt.gif" width=5 height=5></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td valign="middle"><table width="100%"  border="0" cellspacing="0" cellpadding="5">
+      <tr valign="middle">
+        <td style="COLOR: #ffffff"><p style="COLOR: #ffffff; TEXT-ALIGN: justify; MARGIN-TOP: 0px">如何获得最新成交价？</p></td>
+				<td width="70" align="right">
+				<A href="#"><IMG border=0 alt=上一页 src="images/previous.gif" width=17 height=17></a>
+				&nbsp; &nbsp;
+				<A href="#"><IMG border=0 alt=下一页 src="images/next.gif" width=17 height=17></a>
+				</td>
+      </tr>
+    </table></td>
+    <td width=5></td>
+  </tr>
+  <tr>
+    <td width=5 height=5><IMG src="images/tmenu/lb.gif" width=5 height=5></td>
+    <td></td>
+    <td width=5 height=5><IMG src="images/tmenu/rb.gif" width=5 height=5></td>
+  </tr>
+</table>
+<div class=longtext>
+<h1>如何获得最新成交价？</h1>
+<pre>&nbsp;</pre>
+<h2>1.雷达屏或图形分析</h2>
+<p>
+	在雷达屏中或图形分析中，可以使用 last 关键字获得该只股票代码最新的成交价格。
+</p>
+
+<h2>2.在交易APP中</h2>
+<div width=50%>
+<p>
+	在交易APP中，可以使用组件QuoteProvider或PriceSeriesProvider获得最新的成交价格。
+    QuoteProvider是用来获得盘口买一卖一价的组件；PriceSeriesProvider 将Bar类型设置为 ticks，则可以获得最新的ticks的收盘价。
+    注意：QuoteProvider和PriceSeriesProvider 也可以用于指标和策略中获得最新价，但不推荐。
+</p>
+</div>
+
+<h2>&nbsp;</h2>
+
+<h2>示例1:使用QuotesProvider获得最新价</h2>
+<pre class="brush: EasyLanguage;">
+using guosen;
+using tsdata.common;
+using tsdata.marketdata;
+
+
+vars:QuotesProvider QP(null);
+method void AnalysisTechnique_Initialized( elsystem.Object sender, elsystem.InitializedEventArgs args ) 
+begin
+	QP = new QuotesProvider;
+	QP.Load = false;
+	QP.Symbol = "000001.SZ";//设置股票代码
+	QP.fields += "bid,ask,description,Last";//属性可增可减，不区分大小写，但需用逗号分隔开来
+	QP.Updated += QP_Updated; //为QuotesProvider绑定更新事件
+	QP.Load = true;         
+end;
+
+Method void QP_Updated(elsystem.Object sender,tsdata.marketdata.QuoteUpdatedEventArgs args)
+Begin
+	if(QP.State=DataState.loaded)then
+	Begin
+		Print("Description: "+QP.Quote["description"].StringValue + //代码名称
+			 " Last:" + QP.Quote["Last"].DoubleValue.ToString() +   //最新价
+			 " Bid:" +QP.Quote["Bid"].DoubleValue.ToString()+       //Bid
+			 " Ask:" +QP.Quote["Ask"].DoubleValue.ToString()+       //Ask
+			 "");
+	End;
+End;
+</pre>
+
+
+<h2>示例2:使用PriceSeriesProvider获得最新价</h2>
+<pre class="brush: EasyLanguage;">
+
+using guosen;
+using tsdata.common;
+using tsdata.marketdata;
+using elsystem;
+
+vars:PriceSeriesProvider PSP(null);
+method void AnalysisTechnique_Initialized( elsystem.Object sender, elsystem.InitializedEventArgs args ) 
+begin
+	PSP = new PriceSeriesProvider;
+	PSP.Load = False;
+	PSP.Symbol = "000001.SZ";
+	PSP.Interval.IntervalType = tsdata.marketdata.DataIntervalType.ticks;//周期设置为逐笔以获得最新成交价
+	PSP.Interval.IntervalSpan = 1;  //也即每1笔线
+	PSP.Range.Type = tsdata.marketdata.DataRangeType.Bars;//设置PSP载入为条数
+	PSP.Range.Bars = 10 ; //设置载入10条bar
+	PSP.IncludeVolumeInfo = false; //不加载成交量信息
+	PSP.IncludeTicksInfo = false;  //不加载Ticks信息
+	PSP.UseNaturalHours = false;
+	PSP.Realtime = TRUE; //设置为实时更新	
+	PSP.Updated += PSP_Updated; //绑定更新事件，当PSP更新或收到行情推送时刷新
+	PSP.StateChanged += PSP_StateChanged; //绑定更新事件，当PSP更新或收到行情推送时刷新
+	PSP.Load = TRUE;
+end;
+
+Method void PSP_Updated(elsystem.Object sender,tsdata.marketdata.PriceSeriesUpdatedEventArgs args)
+Begin
+	print(PSP.State.ToString());
+	if(PSP.State=DataState.loaded)then
+	Begin	
+		Print(DateTime.Now.toString()+
+			 " Symbol: "+PSP.Symbol+  								//代码
+			 " Time:" + PSP.Time[1].ToString()  +		            //最新价的交易所时间
+			 " Last:" + PSP.Close[0].ToString() +   				//最新价
+			 "");
+	End;
+End;
+
+Method void PSP_StateChanged(elsystem.Object sender,tsdata.common.StateChangedEventArgs args)
+Begin
+	print("StateChanged! " + PSP.State.ToString());
+End;
+</pre>
+<h2>附件</h2>
+
+<pre>无
+</pre>
+</div>
+
+<div>
+	<p align="left">Copyright  1998-2016 国信证券股份有限公司 版权所有</p>
+</div>
+</div>
+</body>
+</html>
