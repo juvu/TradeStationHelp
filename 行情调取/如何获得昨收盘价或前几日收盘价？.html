@@ -1,7 +1,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
-	<title>如何获得涨停跌停价？-行情调取-国信证券TradeStation帮助文档</title>
+	<title>如何获得前收盘价（昨收盘价）或前几日收盘价？-行情调取-国信证券TradeStation帮助文档</title>
     <script type="text/javascript" src="../scripts/shCore.js"></script>
 	<script type="text/javascript" src="../scripts/shBrushEL.js"></script>
 	<link type="text/css" rel="stylesheet" href="../styles/shCoreDefault.css"/>
@@ -37,49 +37,50 @@
   </tr>
 </table>
 <div class=longtext>
-<h1>如何获得涨停跌停价？</h1>
+<h1>如何获得前收盘价（昨收盘价）或前几日收盘价？</h1>
 <pre>&nbsp;</pre>
 
 <div width=50%>
 
-<p>
-使用保留字（Reserve Word）不能直接获得涨停价或跌停价。
-国信TradeStation提供QuotesProvider在EasyLanguage中获取代码的涨停价和跌停价。
-具体用法见示例。
+  <h2>1.雷达屏或图形分析</h2>
+  <p>使用保留字（Reserve Word）CloseD(1)可以获得前一个交易日的收盘价。</p>
+  <p>此外，如果是一些规则的周期，如日、周、月、年，可以使用HighD, HighW, HighM, HighY（LowD, LowW, LowM, LowY）引用指定区间的最高价（最低价），如HighD(1)是前一个交易日的最高价。此外前开盘价与前最高价等与之类似。 </p>
+  <h2>2.交易App中</h2>
+  <p> 一般的思路是使用PriceSeriesProvider向前数一根日线Bar，那么其收盘价即为前收盘价。一种更简便的方式是， 国信TradeStation提供QuotesProvider在EasyLanguage中获取代码的前收盘价。
+  具体用法见示例。  </p>
+  <p>&nbsp;
 </p>
+<p>&nbsp;</p>
 
 </div>
 
 
-<h2>示例1:使用QuotesProvider获得涨停价或跌停价</h2>
+<h2>示例1:使用QuotesProvider获得前收盘价</h2>
 <pre class="brush: EasyLanguage;">
 using guosen;
 using tsdata.common;
 using tsdata.marketdata;
-
-
+ 
+ 
 vars:QuotesProvider QP(null);
 method void AnalysisTechnique_Initialized( elsystem.Object sender, elsystem.InitializedEventArgs args ) 
 begin
-	QP = new QuotesProvider;
-	QP.Load = false;
-	QP.Symbol = "000001.SZ";//设置股票代码
-	QP.fields += "highLimit,LowLimit";//属性可增可减，不区分大小写，但需用逗号分隔开来
-	QP.Updated += QP_Updated; //为QuotesProvider绑定更新事件 
-	QP.Load = true;         
+    QP = new QuotesProvider;
+    QP.Load = false;
+    QP.Symbol = "000001.SZ";//设置股票代码
+    QP.fields += "PreviousClose";//前收盘价
+    QP.Updated += QP_Updated; //为QuotesProvider绑定更新事件 
+    QP.Load = true;         
 end;
-
+ 
 Method void QP_Updated(elsystem.Object sender,tsdata.marketdata.QuoteUpdatedEventArgs args)
 Begin
-	if(QP.State=DataState.loaded)then
-	Begin
-		Print("HighLimit: "+ numtostr(QP.Quote["HighLimit"].Int64Value,0) + //代码名称
-			 " LowLimit:" + numtostr(QP.Quote["HighLimit"].Int64Value,0)  //最新价
-			 );
-	End;
+    if(QP.State=DataState.loaded)then
+    Begin
+        Print("PreviousClose: "+ numtostr(QP.Quote["PreviousClose"].DoubleValue,0));
+    End;
 End;
-//打印语句输出栏结果示例：HighLimit: 100900 LowLimit:100900
-
+//打印语句输出栏结果示例：PreviousClose: 10
 </pre>
 
 <h2>附件</h2>

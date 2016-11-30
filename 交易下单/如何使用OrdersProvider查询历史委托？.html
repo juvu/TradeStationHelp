@@ -1,0 +1,142 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+	<title>如何使用OrdersProvider查询历史委托？-交易下单-国信证券TradeStation帮助文档</title>
+    <script type="text/javascript" src="../scripts/shCore.js"></script>
+	<script type="text/javascript" src="../scripts/shBrushEL.js"></script>
+	<link type="text/css" rel="stylesheet" href="../styles/shCoreDefault.css"/>
+    <script type="text/javascript">SyntaxHighlighter.all();</script>
+	<link href="../styles.css" rel=stylesheet type="text/css">
+</head>
+<body>
+<div style="width:1000px;margin: 0 auto;">
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" bgcolor="#0062a6">
+  <tr>
+    <td width=5 height=5><IMG src="../images/tmenu/lt.gif" width=5 height=5></td>
+    <td></td>
+    <td><IMG src="../images/tmenu/rt.gif" width=5 height=5></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td valign="middle"><table width="100%"  border="0" cellspacing="0" cellpadding="5">
+      <tr valign="middle">
+        <td style="COLOR: #ffffff"><p style="COLOR: #ffffff; TEXT-ALIGN: justify; MARGIN-TOP: 0px">交易下单</p></td>
+				<td width="70" align="right">
+				<A href="#"><IMG border=0 alt=上一页 src="../images/previous.gif" width=17 height=17></a>
+				&nbsp; &nbsp;
+				<A href="#"><IMG border=0 alt=下一页 src="../images/next.gif" width=17 height=17></a>
+				</td>
+      </tr>
+    </table></td>
+    <td width=5></td>
+  </tr>
+  <tr>
+    <td width=5 height=5><IMG src="../images/tmenu/lb.gif" width=5 height=5></td>
+    <td></td>
+    <td width=5 height=5><IMG src="../images/tmenu/rb.gif" width=5 height=5></td>
+  </tr>
+</table>
+<div class=longtext>
+<h1>如何使用OrdersProvider查询历史委托？</h1>
+<pre>&nbsp;</pre>
+
+<div width=50%>
+
+<p>
+通过设置OrdersProvider的属性可以获得不同时期的订单列表集合。默认不设置OrdersProvider的日期起止时间的话，其查询的是当日的委托集合信息。若是要查询历史订单信息的话，需要指定账户ID以及起始日期。
+</p>
+
+</div>
+
+
+<h2>示例1:使用OrdersProvider查询历史委托</h2>
+<pre class="brush: EasyLanguage;">
+using guosen;
+using elsystem;
+using elsystem.collections;
+using tsdata.common;
+
+vars:
+OrdersProvider  OP(null),
+DateTime dt(null),
+string accountid("");
+
+method void AnalysisTechnique_Initialized( elsystem.Object sender, elsystem.InitializedEventArgs args ) 
+begin
+	accountid = "410038122059";//Account ID需为绑定的ID
+	dt = DateTime.Now; 
+	dt.AddWeeks(-1);//设置dt为一周前
+	OP = new OrdersProvider; 
+	OP.From = dt;
+	OP.Accounts += accountid;
+	OP.To = DateTime.Now; //截止日期
+	OP.Realtime = TRUE;
+	OP.StateChanged += OP_StateChanged;
+	OP.Load = TRUE;
+end;
+
+Method void OP_StateChanged(elsystem.Object sender,tsdata.common.StateChangedEventArgs args)
+vars:int loop;
+Begin
+	if(OP.State = DataState.Loaded)then
+	Begin 
+		for loop = 0 to OP.Count-1
+		Begin
+			print(OrderToString(OP[loop]));
+		End;
+	End;
+End;
+
+//Join the properties of order object to a string
+Method string OrderToString(Order ord)
+vars:string str,Vector vec_tmp,int loop,string sep,string sepChar;
+Begin
+	str = "";
+	sep = ",";
+	sepChar = "=";
+	vec_tmp = new Vector;
+	vec_tmp.Push_back("account" + sepChar + ord.AccountID);
+	vec_tmp.Push_back("action" + sepChar + ord.Action.ToString().ToLower());
+	vec_tmp.Push_back("duration" + sepChar + ord.Duration.ToString().ToLower());
+	vec_tmp.Push_back("enteredquantity" + sepChar + ord.EnteredQuantity.ToString().ToLower());
+	vec_tmp.Push_back("enteredtime" + sepChar + ord.EnteredTime.ToString().ToLower());
+	vec_tmp.Push_back("filledquantity" + sepChar + ord.FilledQuantity.ToString().ToLower());
+	vec_tmp.Push_back("filledtime" + sepChar + ord.FilledTime.ToString().ToLower());
+	vec_tmp.Push_back("limitprice" + sepChar + ord.LimitPrice.ToString().ToLower());
+	vec_tmp.Push_back("orderid" + sepChar + ord.OrderID.ToString().ToLower());
+	vec_tmp.Push_back("state" + sepChar + ord.State.ToString().ToLower());
+	vec_tmp.Push_back("statedetail" + sepChar + ord.StateDetail.ToString().ToLower());
+	vec_tmp.Push_back("limitprice" + sepChar + ord.LimitPrice.ToString().ToLower());
+	vec_tmp.Push_back("symbol" + sepChar + ord.Symbol.ToString().ToLower());
+	vec_tmp.Push_back("type" + sepChar + ord.Type.ToString().ToLower());
+	vec_tmp.Push_back("limitprice" + sepChar + ord.LimitPrice.ToString().ToLower());
+	Try
+		vec_tmp.Push_back("ordername" + sepChar + ord.ExtendedProperties["OrderName"].ToString());
+	catch(elsystem.Exception ex)
+		vec_tmp.Push_back("ordername" + sepChar + "NULL");
+	End; 
+	for loop = 0 to vec_tmp.Count-1
+	Begin
+		str = str + vec_tmp[loop].ToString()+",";
+	End;
+	Return str; 
+End;
+//打印语句输出栏结果示例： 
+//account=410038122059,action=buy,duration=gfd,enteredquantity=500,enteredtime=2016/11/30 14:57:46,filledquantity=500,filledtime=2016/11/30 14:57:46,limitprice=14.08,orderid=0-_410-0381-2205-9_20-1611-30_1-0396-3386,state=filled,statedetail=filled,limitprice=14.08,symbol=000919.sz,type=limit,limitprice=14.08,ordername=,
+//account=410038122059,action=buy,duration=gfd,enteredquantity=500,enteredtime=2016/11/30 14:58:00,filledquantity=500,filledtime=2016/11/30 14:58:00,limitprice=14.08,orderid=0-_410-0381-2205-9_20-1611-30_1-0396-0382,state=filled,statedetail=filled,limitprice=14.08,symbol=000919.sz,type=limit,limitprice=14.08,ordername=,
+
+
+</pre>
+
+<h2>附件</h2>
+
+<pre>无
+</pre>
+</div>
+
+<div>
+	<p align="left">Copyright  1998-2016 国信证券股份有限公司 版权所有</p>
+</div>
+</div>
+</body>
+</html>

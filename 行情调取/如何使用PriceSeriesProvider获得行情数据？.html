@@ -1,0 +1,119 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+	<title>如何使用PriceSeriesProvider获得行情数据？-行情调取-国信证券TradeStation帮助文档</title>
+    <script type="text/javascript" src="../scripts/shCore.js"></script>
+	<script type="text/javascript" src="../scripts/shBrushEL.js"></script>
+	<link type="text/css" rel="stylesheet" href="../styles/shCoreDefault.css"/>
+    <script type="text/javascript">SyntaxHighlighter.all();</script>
+	<link href="styles.css" rel=stylesheet type="text/css">
+</head>
+<body>
+<div style="width:1000px;margin: 0 auto;">
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" bgcolor="#0062a6">
+  <tr>
+    <td width=5 height=5><IMG src="images/tmenu/lt.gif" width=5 height=5></td>
+    <td></td>
+    <td><IMG src="images/tmenu/rt.gif" width=5 height=5></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td valign="middle"><table width="100%"  border="0" cellspacing="0" cellpadding="5">
+      <tr valign="middle">
+        <td style="COLOR: #ffffff"><p style="COLOR: #ffffff; TEXT-ALIGN: justify; MARGIN-TOP: 0px">行情调取</p></td>
+				<td width="70" align="right">
+				<A href="#"><IMG border=0 alt=上一页 src="../images/previous.gif" width=17 height=17></a>
+				&nbsp; &nbsp;
+				<A href="#"><IMG border=0 alt=下一页 src="../images/next.gif" width=17 height=17></a>
+				</td>
+      </tr>
+    </table></td>
+    <td width=5></td>
+  </tr>
+  <tr>
+    <td width=5 height=5><IMG src="images/tmenu/lb.gif" width=5 height=5></td>
+    <td></td>
+    <td width=5 height=5><IMG src="images/tmenu/rb.gif" width=5 height=5></td>
+  </tr>
+</table>
+<div class=longtext>
+<h1>如何使用PriceSeriesProvider获得行情数据？</h1>
+<pre>&nbsp;</pre>
+
+<div width=50%>
+
+<p>
+一般而言，PriceSeriesProvider主要用来获得某只股票的特定周期的价格序列，不建议使用PriceSeriesProvider查看行情，若是想要查看买一卖一信息可以使用QuotesProvider，若是获得盘口数据可以使用MarketDepthProvider。但并不意味着PriceSeriesProvider不能用来获取行情，如果将其周期设置为1 tick并设置RealTime为TRUE，那么PriceSeriesProvider 也可以用作行情获取。
+具体用法见示例。
+</p>
+
+</div>
+
+
+<h2>示例1:使用PriceSeriesProvider获得行情</h2>
+<pre class="brush: EasyLanguage;">
+//引用命名空间
+using tsdata.marketdata;
+using elsystem;
+//变量声明
+vars:tsdata.marketdata.PriceSeriesProvider PSP(null);
+//引用命名空间
+method void AnalysisTechnique_Initialized( elsystem.Object sender, elsystem.InitializedEventArgs args ) 
+Begin
+	PSP = new PriceSeriesProvider;
+	PSP.Load = False; 	//修改属性之前关闭数据连接
+	PSP.RealTime = True; 	//设置为True以接收行情数据，设置为False为获取历史数据
+	PSP.TimeZone = tsdata.common.TimeZone.Local;
+	PSP.Symbol = "002413.SZ"; 	//设置代码.
+	PSP.Interval.ChartType = tsdata.marketdata.DataChartType.Bars;	//设置图形为K线图.
+	PSP.Interval.IntervalType = tsdata.marketdata.DataIntervalType.Ticks; 	//设置周期类型为Ticks.
+	PSP.Interval.IntervalSpan = 1; 	//设置周期为1Ticks.
+	PSP.Range.Type = tsdata.marketdata.DataRangeType.Bars;	//按照Bars数目设置区间.
+	PSP.Range.Bars = 10;	//设置数据区间的Bars数目共计10.
+	PSP.IncludeVolumeInfo = True;	//设置为True 则包含Volume信息.
+	PSP.IncludeTicksInfo = True;	//设置为True 则包含Ticks信息.
+	PSP.UseNaturalHours = True;	//设置为True 则尝试使用自然时间.
+	PSP.StateChanged += PSP_StateChanged ;	// 为PSP绑定状态变化事件PSP_StateChanged.
+	PSP.Updated += PSP_Updated ; // 为PSP绑定更新事件PSP_Updated.
+	PSP.Load = True;	//打开数据连接，只是打开动作，不堵塞进程，异步载入数据
+End;
+//PSP状态变化事件
+method void PSP_StateChanged(elsystem.Object sender,tsdata.common.StateChangedEventArgs args)
+Begin
+	print("PSP.State: "+PSP.State.ToString() );
+	if(PSP.State = tsdata.common.DataState.Loaded) then 	//如果加载状态为已加载(Loaded)
+	Begin
+		//Sample code:
+		print("PSP loaded.");
+	End;
+End;
+
+//PSP更新事件
+method void PSP_Updated(elsystem.Object sender,tsdata.marketdata.PriceSeriesUpdatedEventArgs args)
+Begin
+	//使用FileAppend(或StreamWriter)将行情高开低收（HOLC）和成交量（Volume），
+	//写入到文件C:\Users\<<username>>\Documents\Quotes.csv中}
+	FileAppend(Environment.GetFolderPath(9) + "..\Quotes.csv", 
+        DateTime.Now.ToString()+", "+
+        PSP.Time[0].toString()+", "+
+        numtostr(PSP.High[0],2) + ", " +
+        numtostr(PSP.Open[0],2) + ", " +
+        numtostr(PSP.Low[0],2)+ ", " +
+        numtostr(PSP.Close[0],2)+ ", " +
+        numtostr(PSP.Volume[0],2) + newline) ;
+End;
+
+</pre>
+
+<h2>附件</h2>
+
+<pre>无
+</pre>
+</div>
+
+<div>
+	<p align="left">Copyright  1998-2016 国信证券股份有限公司 版权所有</p>
+</div>
+</div>
+</body>
+</html>

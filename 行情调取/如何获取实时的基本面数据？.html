@@ -1,0 +1,583 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+	<title>如何获取实时的换手率数据？-行情调取-国信证券TradeStation帮助文档</title>
+    <script type="text/javascript" src="../scripts/shCore.js"></script>
+	<script type="text/javascript" src="../scripts/shBrushEL.js"></script>
+	<link type="text/css" rel="stylesheet" href="../styles/shCoreDefault.css"/>
+    <script type="text/javascript">SyntaxHighlighter.all();</script>
+	<link href="styles.css" rel=stylesheet type="text/css">
+</head>
+<body>
+<div style="width:1000px;margin: 0 auto;">
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" bgcolor="#0062a6">
+  <tr>
+    <td width=5 height=5><IMG src="images/tmenu/lt.gif" width=5 height=5></td>
+    <td></td>
+    <td><IMG src="images/tmenu/rt.gif" width=5 height=5></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td valign="middle"><table width="100%"  border="0" cellspacing="0" cellpadding="5">
+      <tr valign="middle">
+        <td style="COLOR: #ffffff"><p style="COLOR: #ffffff; TEXT-ALIGN: justify; MARGIN-TOP: 0px">行情调取</p></td>
+				<td width="70" align="right">
+				<A href="#"><IMG border=0 alt=上一页 src="../images/previous.gif" width=17 height=17></a>
+				&nbsp; &nbsp;
+				<A href="#"><IMG border=0 alt=下一页 src="../images/next.gif" width=17 height=17></a>
+				</td>
+      </tr>
+    </table></td>
+    <td width=5></td>
+  </tr>
+  <tr>
+    <td width=5 height=5><IMG src="images/tmenu/lb.gif" width=5 height=5></td>
+    <td></td>
+    <td width=5 height=5><IMG src="images/tmenu/rb.gif" width=5 height=5></td>
+  </tr>
+</table>
+<div class=longtext>
+<h1>如何获取实时的换手率数据？</h1>
+<pre>&nbsp;</pre>
+
+<div width=50%>
+  <h2>1.雷达屏或图形分析</h2>
+  <p>使用函数getfunddata可以获得基本面数据。字段列表及说明如下：<br>
+  </p>
+  <table border=1 cellpadding=5 cellspacing=0 width="50%">
+<tr bgcolor="#c0c0c0">
+	<td width="80" valign="top" align="center"><b>字段</b></td>
+    <td width="160" valign="top" align="center"><b>名称</b></td>
+</tr>
+<!--属性第一行开始-->
+<tr>
+	<td width="80" valign="top" align="left"><b>SLSC</b></td>
+    <td width="160" valign="top" align="left"><b>上市板块 
+1-主板；2-中小板；3-三板；4-其他；5-大宗交易；6-创业板 </b></td>
+</tr>
+<!--属性第一行结束-->
+
+<tr>
+	<td width="80" valign="top" align="left"><b>SLST</b></td>
+	<td width="160" valign="top" align="left"><b>上市状态 
+1-上市；2-暂停；3-终止；4-其他 </b></td>
+</tr>
+
+<tr>
+	<td width="80" valign="top" align="left"><b>SFIC</b></td>
+    <td width="160" valign="top" align="left"><b>一级行业代码 </b></td>
+</tr>
+
+<tr>
+	<td width="80" valign="top" align="left"><b>SFIN</b></td>
+    <td width="160" valign="top" align="left"><b>一级行业名称</b></td>
+</tr>
+
+<tr>
+	<td width="80" valign="top" align="left"><b>SSIC</b></td>
+    <td width="160" valign="top" align="left"><b>二级行业代码</b></td>
+</tr>
+
+<tr>
+	<td width="80" valign="top" align="left"><b>SSIN</b></td>
+    <td width="160" valign="top" align="left"><b>二级行业名称 </b></td>
+</tr>
+
+<tr>
+	<td width="80" valign="top" align="left"><b>STIC</b></td>
+    <td width="160" valign="top" align="left"><b>三级行业代码</b></td>
+</tr>
+
+<tr>
+	<td width="80" valign="top" align="left"><b>STIN</b></td>
+    <td width="160" valign="top" align="left"><b>三级行业名称</b></td>
+</tr>
+
+<tr>
+	<td width="80" valign="top" align="left"><b>CTSH</b></td>
+    <td width="160" valign="top" align="left"><b>总股本
+单位：（股）</b></td>
+</tr>
+
+<tr>
+	<td width="80" valign="top" align="left"><b>CLSH</b></td>
+    <td width="160" valign="top" align="left"><b>已流通股份 
+单位：（股） </br></td>
+</tr>
+
+<tr>
+	<td width="80" valign="top" align="left"><b>CLAS</b></td>
+    <td width="160" valign="top" align="left"><b>流通A股</b></td>
+</tr>
+
+<tr>
+	<td width="80" valign="top" align="left"><b>CLBS</b></td>
+    <td width="160" valign="top" align="left"><b>流通B股</b></td>
+</tr>
+
+<tr>
+	<td width="80" valign="top" align="left"><b>CLHS</b></td>
+    <td width="160" valign="top" align="left"><b>流通H股</b></td>
+</tr>
+
+<tr>
+	<td width="80" valign="top" align="left"><b>COLS</b></td>
+    <td width="160" valign="top" align="left"><b>其他流通股</b></td>
+</tr>
+
+<tr>
+	<td width="80" valign="top" align="left"><b>CRSH</b></td>
+    <td width="160" valign="top" align="left"><b>流通受限股</b></td>
+</tr>
+
+<tr>
+	<td width="80" valign="top" align="left"><b>CRAS</b></td>
+    <td width="160" valign="top" align="left"><b>流通受限A股</b></td>
+</tr>
+
+<tr>
+	<td width="80" valign="top" align="left"><b>CRBS</b></td>
+    <td width="160" valign="top" align="left"><b>流通受限B股</b></td>
+</tr>
+
+<tr>
+	<td width="80" valign="top" align="left"><b>CORS</b></td>
+    <td width="160" valign="top" align="left"><b>其他受限股</b></td>
+</tr>
+
+<tr>
+	<td width="80" valign="top" align="left"><b>FEPS</b></td>
+    <td width="160" valign="top" align="left"><b>每股净资产 
+单位：（元/股），用于计算P/B</b></td>
+</tr>
+
+
+<tr>
+	<td width="80" valign="top" align="left"><b>FCFP</b></td>
+    <td width="160" valign="top" align="left"><b>每股现金流量净额
+单位：（元/股）</b></td>
+</tr>
+
+
+<tr>
+	<td width="80" valign="top" align="left"><b>FROA</b></td>
+    <td width="160" valign="top" align="left"><b>总资产收益率</b></td>
+</tr>
+
+
+<tr>
+	<td width="80" valign="top" align="left"><b>FROE</b></td>
+    <td width="160" valign="top" align="left"><b>净资产收益率</b></td>
+</tr>
+
+<tr>
+	<td width="80" valign="top" align="left"><b>FDAR</b></td>
+    <td width="160" valign="top" align="left"><b>资产负债率 
+单位：（%）</b></td>
+</tr>
+
+<tr>
+	<td width="80" valign="top" align="left"><b>FCRT</b></td>
+    <td width="160" valign="top" align="left"><b>流动比率</b></td>
+</tr>
+
+<tr>
+	<td width="80" valign="top" align="left"><b>FQRT</b></td>
+    <td width="160" valign="top" align="left"><b>速动比率</b></td>
+</tr>
+
+<tr>
+	<td width="80" valign="top" align="left"><b>FFAT</b></td>
+    <td width="160" valign="top" align="left"><b>固定资产周转率</b></td>
+</tr>
+
+<tr>
+	<td width="80" valign="top" align="left"><b>FTAT</b></td>
+    <td width="160" valign="top" align="left"><b>总资产周转率</b></td>
+</tr>
+
+<tr>
+	<td width="80" valign="top" align="left"><b>FINT</b></td>
+    <td width="160" valign="top" align="left"><b>存货周转率</b></td>
+</tr>
+
+<tr>
+	<td width="80" valign="top" align="left"><b>FBEY</b></td>
+    <td width="160" valign="top" align="left"><b>基本每股收益同比增长</b></td>
+</tr>
+
+<tr>
+	<td width="80" valign="top" align="left"><b>FORG</b></td>
+    <td width="160" valign="top" align="left"><b>营业收入同比增长</b></td>
+</tr>
+
+<tr>
+	<td width="80" valign="top" align="left"><b>FOPG</b></td>
+    <td width="160" valign="top" align="left"><b>营业利润同比增长</b></td>
+</tr>
+<tr>
+	<td width="80" valign="top" align="left"><b>FNPG</b></td>
+    <td width="160" valign="top" align="left"><b>净利润同比增长</b></td>
+</tr>
+<tr>
+	<td width="80" valign="top" align="left"><b>FNAG</b></td>
+    <td width="160" valign="top" align="left"><b>净资产同比增长</b></td>
+</tr>
+
+<tr>
+	<td width="80" valign="top" align="left"><b>FTAG</b></td>
+    <td width="160" valign="top" align="left"><b>总资产同比增长</b></td>
+</tr>
+
+<tr>
+	<td width="80" valign="top" align="left"><b>FORG</b></td>
+    <td width="160" valign="top" align="left"><b>主营业务增长率</b></td>
+</tr>
+
+<tr>
+	<td width="80" valign="top" align="left"><b>FNPG</b></td>
+    <td width="160" valign="top" align="left"><b>净利润增长率</b></td>
+</tr>
+
+<tr>
+	<td width="80" valign="top" align="left"><b>FNOC</b></td>
+    <td width="160" valign="top" align="left"><b>经营活动产生的现金流量净额 </b></td>
+</tr>
+</table>
+<p> 具体用法见示例一。</p>
+
+<h2>2.交易App中</h2>
+<p>使用函数FundamentalQuotesProvider可以获得基本面数据。相应地，利用TradeStation Tools可以快速根据字段生成代码。<br>
+</p>
+<p> 具体用法见示例二。</p>
+</div>
+
+
+<h2>示例1:使用函数getfunddata在指标或策略中获得换手率数据</h2>
+<pre class="brush: EasyLanguage;">
+rate =( volume/getfunddata("CLAS",0))*10000;
+
+plot1(rate," 换手率 %"); 
+
+</pre>
+
+<h2>示例2:使用函数FundamentalQuotesProvider获取基本面数据</h2>
+<pre class="brush: EasyLanguage;">
+using tsdata.marketdata;
+
+
+vars:
+FundamentalQuotesProvider FQP(null);
+
+
+method void AnalysisTechnique_Initialized( elsystem.Object sender, elsystem.InitializedEventArgs args )
+Begin
+	FQP = new FundamentalQuotesProvider;
+	FQP.Load = false;	//关闭数据连接
+	FQP.Fields += "FEPS";	//每股收益(EPS) DataType：DoubleValue [下标]
+	FQP.Fields += "FNAP";	//每股净资产(NetAssetPS)备注：单位：（元/股），用于计算P/B DataType：DoubleValue [下标]
+	FQP.Fields += "FCFP";	//每股现金流量净额(CashFlowPS)备注：单位：（元/股） DataType：DoubleValue [下标]
+	FQP.Fields += "FROA";	//总资产收益率(ROA) DataType：DoubleValue [下标]
+	FQP.Fields += "FROE";	//净资产收益率(ROE) DataType：DoubleValue [下标]
+	FQP.Fields += "FDAR";	//资产负债率(DebtAssetsRatio)备注：单位：（%） DataType：DoubleValue [下标]
+	FQP.Fields += "FCRT";	//流动比率(CurrentRatio) DataType：DoubleValue [下标]
+	FQP.Fields += "FQRT";	//速动比率(QuickRatio) DataType：DoubleValue [下标]
+	FQP.Fields += "FFAT";	//固定资产周转率(FixedAssetTRate) DataType：DoubleValue [下标]
+	FQP.Fields += "FTAT";	//总资产周转率(TotalAssetTRate) DataType：DoubleValue [下标]
+	FQP.Fields += "FINT";	//存货周转率(InventoryTRate) DataType：DoubleValue [下标]
+	FQP.Fields += "FBEY";	//基本每股收益同比增长(BasicEPSYOY) DataType：DoubleValue [下标]
+	FQP.Fields += "FORG";	//营业收入同比增长(OperatingRevenueGrowRate) DataType：DoubleValue [下标]
+	FQP.Fields += "FOPG";	//营业利润同比增长(OperProfitGrowRate) DataType：DoubleValue [下标]
+	FQP.Fields += "FNPG";	//净利润同比增长(NetProfitGrowRate) DataType：DoubleValue [下标]
+	FQP.Fields += "FNAG";	//净资产同比增长(NetAssetGrowRate) DataType：DoubleValue [下标]
+	FQP.Fields += "FTAG";	//总资产同比增长(TotalAssetGrowRate) DataType：DoubleValue [下标]
+	FQP.Fields += "FNPG";	//净利润增长率(NetProfitGrowRate) DataType：DoubleValue [下标]
+	FQP.Fields += "FNOC";	//经营活动产生的现金流量净额(NetOperateCashFlow) DataType：DoubleValue [下标]
+	FQP.Fields += "FTOR";	//每股营业总收入(TotalOperatingRevenuePS) DataType：DoubleValue [下标]
+	FQP.Fields += "FMIS";	//每股营业收入(MainIncomePS) DataType：DoubleValue [下标]
+	FQP.Fields += "FOPP";	//每股营业利润(OperProfitPS) DataType：DoubleValue [下标]
+	FQP.Fields += "FEBP";	//每股息税前利润(EBITPS) DataType：DoubleValue [下标]
+	FQP.Fields += "FCSF";	//每股资本公积金(CapitalSurplusFundPS) DataType：DoubleValue [下标]
+	FQP.Fields += "FSRF";	//每股盈余公积(SurplusReserveFundPS) DataType：DoubleValue [下标]
+	FQP.Fields += "FAFP";	//每股公积金(AccumulationFundPS) DataType：DoubleValue [下标]
+	FQP.Fields += "FUDP";	//每股未分配利润(UndividedProfit) DataType：DoubleValue [下标]
+	FQP.Fields += "FREP";	//每股留存收益(RetainedEarningsPS) DataType：DoubleValue [下标]
+	FQP.Fields += "FOCF";	//每股经营活动产生的现金流量净额(OperCashFlowPS) DataType：DoubleValue [下标]
+	FQP.Fields += "FEFC";	//每股企业自由现金流量(EnterpriseFCFPS) DataType：DoubleValue [下标]
+	FQP.Fields += "FSFC";	//每股股东自由现金流量(ShareholderFCFPS) DataType：DoubleValue [下标]
+	FQP.Fields += "FCEP";	//每股现金及现金等价物余额(CashEquivalentPS) DataType：DoubleValue [下标]
+	FQP.Fields += "FROI";	//投入资本回报率(ROIC)备注：单位：% DataType：DoubleValue 
+	FQP.Fields += "FNPR";	//销售净利率(NetProfitRatio)备注：单位：% DataType：DoubleValue 
+	FQP.Fields += "FGIR";	//销售毛利率(GrossIncomeRatio)备注：单位：% DataType：DoubleValue 
+	FQP.Fields += "FSCR";	//销售成本率(SalesCostRatio)备注：单位：% DataType：DoubleValue 
+	FQP.Fields += "FPCR";	//销售期间费用率(PeriodCostsRate)备注：单位：% DataType：DoubleValue 
+	FQP.Fields += "FNPO";	//净利润/营业总收入(NPToTOR)备注：单位：% DataType：DoubleValue 
+	FQP.Fields += "FOPT";	//营业利润/营业总收入(OperatingProfitToTOR)备注：单位：% DataType：DoubleValue 
+	FQP.Fields += "FETT";	//息税前利润/营业总收入(EBITToTOR)备注：单位：% DataType：DoubleValue 
+	FQP.Fields += "FOCT";	//营业总成本/营业总收入(TOperatingCostToTOR)备注：单位：% DataType：DoubleValue 
+	FQP.Fields += "FOER";	//销售费用/营业总收入(OperatingExpenseRate)备注：单位：% DataType：DoubleValue 
+	FQP.Fields += "FAER";	//管理费用/营业总收入(AdminiExpenseRate)备注：单位：% DataType：DoubleValue 
+	FQP.Fields += "FFER";	//财务费用/营业总收入(FinancialExpenseRate)备注：单位：% DataType：DoubleValue 
+	FQP.Fields += "FALT";	//资产减值损失/营业总收入(AssetImpaLossToTOR)备注：单位：% DataType：DoubleValue 
+	FQP.Fields += "FNPT";	//归属母公司净利润(NetProfit)备注：单位：元 DataType：DoubleValue 
+	FQP.Fields += "FNPC";	//扣除非经常性损益后的净利润(NetProfitCut)备注：单位：元 DataType：DoubleValue 
+	FQP.Fields += "FEBI";	//息税前利润(EBIT)备注：单位：元 DataType：DoubleValue 
+	FQP.Fields += "FEBD";	//息税折旧摊销前利润(EBITDA)备注：单位：元 DataType：DoubleValue 
+	FQP.Fields += "FOPR";	//营业利润率(OperatingProfitRatio)备注：单位：% DataType：DoubleValue 
+	FQP.Fields += "FTPC";	//成本费用利润率(TotalProfitCostRatio)备注：单位：元 DataType：DoubleValue 
+	FQP.Fields += "FONT";	//经营活动净收益/利润总额(OperatingNIToTP)备注：单位：% DataType：DoubleValue 
+	FQP.Fields += "FIAT";	//对联营合营公司投资收益/利润总额(InvestRAssociatesToTP)备注：单位：% DataType：DoubleValue 
+	FQP.Fields += "FVCT";	//价值变动净收益/利润总额(ValueChangeNIToTP)备注：单位：% DataType：DoubleValue 
+	FQP.Fields += "FNNO";	//营业外收益净额/利润总额(NetNonOperatingIncomeToTP)备注：单位：% DataType：DoubleValue 
+	FQP.Fields += "FTTP";	//所得税/利润总额(TaxesToTP)备注：单位：% DataType：DoubleValue 
+	FQP.Fields += "FNPP";	//扣除非经常损益后的净利润/净利润(NPCutToTP)备注：单位：% DataType：DoubleValue 
+	FQP.Fields += "FCAT";	//流动资产/总资产(CurrentAssetsToTA) DataType：DoubleValue 
+	FQP.Fields += "FNCT";	//非流动资产/总资产(NonCurrentAssetsToTA) DataType：DoubleValue 
+	FQP.Fields += "FFAR";	//固定资产比率(FixAssetRatio) DataType：DoubleValue 
+	FQP.Fields += "FIAR";	//无形资产比率(IntangibleAssetRatio) DataType：DoubleValue 
+	FQP.Fields += "FLDA";	//长期借款/总资产(LongDebtToAsset) DataType：DoubleValue 
+	FQP.Fields += "FBPA";	//应付债券/总资产(BondsPayableToAsset) DataType：DoubleValue 
+	FQP.Fields += "FSEC";	//归属母公司股东的权益/全部投入资本(SEWithoutMIToTotalCapital) DataType：DoubleValue 
+	FQP.Fields += "FIBD";	//带息债务/全部投入资本(InteBearDebtToTotalCapital) DataType：DoubleValue 
+	FQP.Fields += "FCLT";	//流动负债/负债合计(CurrentLiabilityToTL) DataType：DoubleValue 
+	FQP.Fields += "FNCL";	//非流动负债/负债合计(NonCurrentLiabilityToTL) DataType：DoubleValue 
+	FQP.Fields += "FETA";	//股东权益比率(EquityToAsset) DataType：DoubleValue 
+	FQP.Fields += "FEMP";	//权益乘数(EquityMultipler) DataType：DoubleValue 
+	FQP.Fields += "FWKC";	//营运资金(WorkingCapital) DataType：DoubleValue 
+	FQP.Fields += "FLDE";	//长期负债/股东权益合计(LongDebtToEquity) DataType：DoubleValue 
+	FQP.Fields += "FLAF";	//长期资产适合率(LongAssetFitRate) DataType：DoubleValue 
+	FQP.Fields += "FSQR";	//保守速动比率(SuperQuickRatio) DataType：DoubleValue 
+	FQP.Fields += "FDER";	//产权比率(DebtEquityRatio) DataType：DoubleValue 
+	FQP.Fields += "FSEL";	//归属母公司股东的权益/负债合计(SEWithoutMIToTL) DataType：DoubleValue 
+	FQP.Fields += "FSED";	//归属母公司股东的权益/带息债务(SEWMIToInterestBearDebt) DataType：DoubleValue 
+	FQP.Fields += "FDTE";	//有形净值债务率(DebtTangibleEquityRatio) DataType：DoubleValue 
+	FQP.Fields += "FTID";	//有形净值/带息债务(TangibleAToInteBearDebt) DataType：DoubleValue 
+	FQP.Fields += "FTND";	//有形净值/净债务(TangibleAToNetDebt) DataType：DoubleValue 
+	FQP.Fields += "FETL";	//息税折旧摊销前利润/负债合计(EBITDAToTLiability) DataType：DoubleValue 
+	FQP.Fields += "FNTL";	//经营活动产生现金流量净额/负债合计(NOCFToTLiability) DataType：DoubleValue 
+	FQP.Fields += "FNTD";	//经营活动产生现金流量净额/带息债务(NOCFToInterestBearDebt) DataType：DoubleValue 
+	FQP.Fields += "FCFL";	//经营活动产生现金流量净额/流动债务(NOCFToCurrentLiability) DataType：DoubleValue 
+	FQP.Fields += "FNND";	//经营活动产生现金流量净额/净债务(NOCFToNetDebt) DataType：DoubleValue 
+	FQP.Fields += "FICV";	//利息保障倍数(InterestCover) DataType：DoubleValue 
+	FQP.Fields += "FLDC";	//长期负债与营运资金比率(LongDebtToWorkingCapital) DataType：DoubleValue 
+	FQP.Fields += "FOCD";	//现金流动负债比(OperCashInToCurrentDebt) DataType：DoubleValue 
+	FQP.Fields += "FOPC";	//营业周期(OperCycle) DataType：DoubleValue 
+	FQP.Fields += "FITD";	//存货周转天数(InventoryTDays) DataType：DoubleValue 
+	FQP.Fields += "FRTR";	//应收账款周转率(ARTRate) DataType：DoubleValue 
+	FQP.Fields += "FRTD";	//应收账款周转天数(ARTDays) DataType：DoubleValue 
+	FQP.Fields += "FPTR";	//应付账款周转率(AccountsPayablesTRate) DataType：DoubleValue 
+	FQP.Fields += "FPTD";	//应付账款周转天数(AccountsPayablesTDays) DataType：DoubleValue 
+	FQP.Fields += "FCTR";	//流动资产周转率(CurrentAssetsTRate) DataType：DoubleValue 
+	FQP.Fields += "FETR";	//股东权益周转率(EquityTRate) DataType：DoubleValue 
+	FQP.Fields += "FPGR";	//利润总额同比增长(TotalProfitGrowRate) DataType：DoubleValue 
+	FQP.Fields += "FPPY";	//归属母公司股东的净利润同比增长(NPParentCompanyYOY) DataType：DoubleValue 
+	FQP.Fields += "FAPF";	//过去五年同期归属母公司净利润平均增幅(AvgNPYOYPastFiveYear) DataType：DoubleValue 
+	FQP.Fields += "FOCY";	//经营活动产生的现金流量净额同比增长(NetOperateCashFlowYOY) DataType：DoubleValue 
+	FQP.Fields += "FOCG";	//每股经营活动产生的现金流量净额同比增长(OperCashPSGrowRate) DataType：DoubleValue 
+	FQP.Fields += "FNRY";	//净资产收益率（摊薄）同比增长(NAORYOY) DataType：DoubleValue 
+	FQP.Fields += "FEGD";	//每股净资产相对年初增长率(EPSGrowRateYTD) DataType：DoubleValue 
+	FQP.Fields += "FSGD";	//归属母公司股东的权益相对年初增长率(SEWithoutMIGrowRateYTD) DataType：DoubleValue 
+	FQP.Fields += "FAGD";	//资产总计相对年初增长率(TAGrowRateYTD) DataType：DoubleValue 
+	FQP.Fields += "FROI";	//可持续增长率(SustainableGrowRate) DataType：DoubleValue 
+	FQP.Fields += "FSCO";	//销售商品提供劳务收到的现金/营业收入(SaleServiceCashToOR) DataType：DoubleValue 
+	FQP.Fields += "FCRS";	//经营活动产生的现金流量净额/营业收入(CashRateOfSales) DataType：DoubleValue 
+	FQP.Fields += "FOCO";	//经营活动产生的现金流量净额/经营活动净收益(NOCFToOperatingNI) DataType：DoubleValue 
+	FQP.Fields += "FCED";	//资本支出/折旧和摊销(CapitalExpenditureToDM) DataType：DoubleValue 
+	FQP.Fields += "FCEI";	//现金及现金等价物净增加额(CashEquivalentIncrease) DataType：DoubleValue 
+	FQP.Fields += "FGSS";	//销售商品提供劳务收到的现金(GoodsSaleServiceRenderCash) DataType：DoubleValue 
+	FQP.Fields += "FFCF";	//自由现金流量(FreeCashFlow) DataType：DoubleValue 
+	FQP.Fields += "FNPS";	//净利润现金含量(NetProfitCashCover) DataType：DoubleValue 
+	FQP.Fields += "FORC";	//营业收入现金含量(OperatingRevenueCashCover) DataType：DoubleValue 
+	FQP.Fields += "FOCA";	//总资产现金回收率(OperCashInToAsset) DataType：DoubleValue 
+	FQP.Fields += "CTSH";	//总股本(TotalShares)备注：单位：（股） DataType：DoubleValue [下标]
+	FQP.Fields += "CLSH";	//已流通股份(LiquidShares)备注：单位：（股） DataType：DoubleValue [下标]
+	FQP.Fields += "CLAS";	//流通A股(AShares) DataType：DoubleValue [下标]
+	FQP.Fields += "CLBS";	//流通B股(BShares) DataType：DoubleValue [下标]
+	FQP.Fields += "CLHS";	//流通H股(HShares) DataType：DoubleValue [下标]
+	FQP.Fields += "COLS";	//其他流通股(OtherLiquidShares) DataType：DoubleValue [下标]
+	FQP.Fields += "CRSH";	//流通受限股(RestrictedShares) DataType：DoubleValue [下标]
+	FQP.Fields += "CRAS";	//流通受限A股(RestrictedAShares) DataType：DoubleValue [下标]
+	FQP.Fields += "CRBS";	//流通受限B股(RestrictedBShares) DataType：DoubleValue [下标]
+	FQP.Fields += "CORS";	//其他受限股(OtherRestrictedShares) DataType：DoubleValue [下标]
+	FQP.Fields += "CNLS";	//未流通股份(NonListedShares) DataType：DoubleValue [下标]
+	FQP.Fields += "SLSC";	//上市板块(ListedSector)备注：1-主板；2-中小板；3-三板；4-其他；5-大宗交易；6-创业板 DataType：DoubleValue 
+	FQP.Fields += "SLST";	//上市状态(ListedState)备注：1-上市；2-暂停；3-终止；4-其他 DataType：DoubleValue [下标]
+	FQP.Fields += "SFIC";	//一级行业代码(FisrtIndustryCode) DataType：StringValue 
+	FQP.Fields += "SFIN";	//一级行业名称(FisrtIndustry) DataType：StringValue 
+	FQP.Fields += "SSIC";	//二级行业代码(SecondIndustryCode) DataType：StringValue 
+	FQP.Fields += "SSIN";	//二级行业名称(SecondIndustry) DataType：StringValue 
+	FQP.Fields += "STIC";	//三级行业代码(ThirdIndustryCode) DataType：StringValue 
+	FQP.Fields += "STIN";	//三级行业名称(ThirdIndustry) DataType：StringValue 
+	FQP.Realtime = True;	//设置组件数据为订阅更新还是快照
+	FQP.Symbol = "002736.SZ";	//设置股票代码
+	FQP.StateChanged += FQP_StateChanged;	// 为FQP绑定状态变化事件
+	FQP.Updated += FQP_Updated;	// 为FQP绑定更新事件
+	FQP.Load = true;	//载入FQP组件，建立数据连接
+End;
+
+
+//FQP状态变化事件
+method void FQP_StateChanged(elsystem.Object sender,tsdata.common.StateChangedEventArgs args)
+Begin
+	print("FQP.State: "+FQP.State.ToString() );
+	if(FQP.State = tsdata.common.DataState.Loaded) then
+	Begin
+		//Sample code:
+		print("FQP loaded.");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"每股收益(EPS):"+numtostr(FQP.Quote["FEPS"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"每股净资产(NetAssetPS):"+numtostr(FQP.Quote["FNAP"].DoubleValue[0],2)+spaces(4)+"备注：单位：（元/股），用于计算P/B");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"每股现金流量净额(CashFlowPS):"+numtostr(FQP.Quote["FCFP"].DoubleValue[0],2)+spaces(4)+"备注：单位：（元/股）");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"总资产收益率(ROA):"+numtostr(FQP.Quote["FROA"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"净资产收益率(ROE):"+numtostr(FQP.Quote["FROE"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"资产负债率(DebtAssetsRatio):"+numtostr(FQP.Quote["FDAR"].DoubleValue[0],2)+spaces(4)+"备注：单位：（%）");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"流动比率(CurrentRatio):"+numtostr(FQP.Quote["FCRT"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"速动比率(QuickRatio):"+numtostr(FQP.Quote["FQRT"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"固定资产周转率(FixedAssetTRate):"+numtostr(FQP.Quote["FFAT"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"总资产周转率(TotalAssetTRate):"+numtostr(FQP.Quote["FTAT"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"存货周转率(InventoryTRate):"+numtostr(FQP.Quote["FINT"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"基本每股收益同比增长(BasicEPSYOY):"+numtostr(FQP.Quote["FBEY"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"营业收入同比增长(OperatingRevenueGrowRate):"+numtostr(FQP.Quote["FORG"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"营业利润同比增长(OperProfitGrowRate):"+numtostr(FQP.Quote["FOPG"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"净利润同比增长(NetProfitGrowRate):"+numtostr(FQP.Quote["FNPG"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"净资产同比增长(NetAssetGrowRate):"+numtostr(FQP.Quote["FNAG"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"总资产同比增长(TotalAssetGrowRate):"+numtostr(FQP.Quote["FTAG"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"净利润增长率(NetProfitGrowRate):"+numtostr(FQP.Quote["FNPG"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"经营活动产生的现金流量净额(NetOperateCashFlow):"+numtostr(FQP.Quote["FNOC"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"每股营业总收入(TotalOperatingRevenuePS):"+numtostr(FQP.Quote["FTOR"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"每股营业收入(MainIncomePS):"+numtostr(FQP.Quote["FMIS"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"每股营业利润(OperProfitPS):"+numtostr(FQP.Quote["FOPP"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"每股息税前利润(EBITPS):"+numtostr(FQP.Quote["FEBP"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"每股资本公积金(CapitalSurplusFundPS):"+numtostr(FQP.Quote["FCSF"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"每股盈余公积(SurplusReserveFundPS):"+numtostr(FQP.Quote["FSRF"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"每股公积金(AccumulationFundPS):"+numtostr(FQP.Quote["FAFP"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"每股未分配利润(UndividedProfit):"+numtostr(FQP.Quote["FUDP"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"每股留存收益(RetainedEarningsPS):"+numtostr(FQP.Quote["FREP"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"每股经营活动产生的现金流量净额(OperCashFlowPS):"+numtostr(FQP.Quote["FOCF"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"每股企业自由现金流量(EnterpriseFCFPS):"+numtostr(FQP.Quote["FEFC"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"每股股东自由现金流量(ShareholderFCFPS):"+numtostr(FQP.Quote["FSFC"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"每股现金及现金等价物余额(CashEquivalentPS):"+numtostr(FQP.Quote["FCEP"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"投入资本回报率(ROIC):"+numtostr(FQP.Quote["FROI"].DoubleValue[0],2)+spaces(4)+"备注：单位：%");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"销售净利率(NetProfitRatio):"+numtostr(FQP.Quote["FNPR"].DoubleValue[0],2)+spaces(4)+"备注：单位：%");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"销售毛利率(GrossIncomeRatio):"+numtostr(FQP.Quote["FGIR"].DoubleValue[0],2)+spaces(4)+"备注：单位：%");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"销售成本率(SalesCostRatio):"+numtostr(FQP.Quote["FSCR"].DoubleValue[0],2)+spaces(4)+"备注：单位：%");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"销售期间费用率(PeriodCostsRate):"+numtostr(FQP.Quote["FPCR"].DoubleValue[0],2)+spaces(4)+"备注：单位：%");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"净利润/营业总收入(NPToTOR):"+numtostr(FQP.Quote["FNPO"].DoubleValue[0],2)+spaces(4)+"备注：单位：%");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"营业利润/营业总收入(OperatingProfitToTOR):"+numtostr(FQP.Quote["FOPT"].DoubleValue[0],2)+spaces(4)+"备注：单位：%");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"息税前利润/营业总收入(EBITToTOR):"+numtostr(FQP.Quote["FETT"].DoubleValue[0],2)+spaces(4)+"备注：单位：%");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"营业总成本/营业总收入(TOperatingCostToTOR):"+numtostr(FQP.Quote["FOCT"].DoubleValue[0],2)+spaces(4)+"备注：单位：%");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"销售费用/营业总收入(OperatingExpenseRate):"+numtostr(FQP.Quote["FOER"].DoubleValue[0],2)+spaces(4)+"备注：单位：%");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"管理费用/营业总收入(AdminiExpenseRate):"+numtostr(FQP.Quote["FAER"].DoubleValue[0],2)+spaces(4)+"备注：单位：%");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"财务费用/营业总收入(FinancialExpenseRate):"+numtostr(FQP.Quote["FFER"].DoubleValue[0],2)+spaces(4)+"备注：单位：%");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"资产减值损失/营业总收入(AssetImpaLossToTOR):"+numtostr(FQP.Quote["FALT"].DoubleValue[0],2)+spaces(4)+"备注：单位：%");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"归属母公司净利润(NetProfit):"+numtostr(FQP.Quote["FNPT"].DoubleValue[0],2)+spaces(4)+"备注：单位：元");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"扣除非经常性损益后的净利润(NetProfitCut):"+numtostr(FQP.Quote["FNPC"].DoubleValue[0],2)+spaces(4)+"备注：单位：元");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"息税前利润(EBIT):"+numtostr(FQP.Quote["FEBI"].DoubleValue[0],2)+spaces(4)+"备注：单位：元");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"息税折旧摊销前利润(EBITDA):"+numtostr(FQP.Quote["FEBD"].DoubleValue[0],2)+spaces(4)+"备注：单位：元");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"营业利润率(OperatingProfitRatio):"+numtostr(FQP.Quote["FOPR"].DoubleValue[0],2)+spaces(4)+"备注：单位：%");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"成本费用利润率(TotalProfitCostRatio):"+numtostr(FQP.Quote["FTPC"].DoubleValue[0],2)+spaces(4)+"备注：单位：元");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"经营活动净收益/利润总额(OperatingNIToTP):"+numtostr(FQP.Quote["FONT"].DoubleValue[0],2)+spaces(4)+"备注：单位：%");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"对联营合营公司投资收益/利润总额(InvestRAssociatesToTP):"+numtostr(FQP.Quote["FIAT"].DoubleValue[0],2)+spaces(4)+"备注：单位：%");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"价值变动净收益/利润总额(ValueChangeNIToTP):"+numtostr(FQP.Quote["FVCT"].DoubleValue[0],2)+spaces(4)+"备注：单位：%");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"营业外收益净额/利润总额(NetNonOperatingIncomeToTP):"+numtostr(FQP.Quote["FNNO"].DoubleValue[0],2)+spaces(4)+"备注：单位：%");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"所得税/利润总额(TaxesToTP):"+numtostr(FQP.Quote["FTTP"].DoubleValue[0],2)+spaces(4)+"备注：单位：%");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"扣除非经常损益后的净利润/净利润(NPCutToTP):"+numtostr(FQP.Quote["FNPP"].DoubleValue[0],2)+spaces(4)+"备注：单位：%");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"流动资产/总资产(CurrentAssetsToTA):"+numtostr(FQP.Quote["FCAT"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"非流动资产/总资产(NonCurrentAssetsToTA):"+numtostr(FQP.Quote["FNCT"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"固定资产比率(FixAssetRatio):"+numtostr(FQP.Quote["FFAR"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"无形资产比率(IntangibleAssetRatio):"+numtostr(FQP.Quote["FIAR"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"长期借款/总资产(LongDebtToAsset):"+numtostr(FQP.Quote["FLDA"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"应付债券/总资产(BondsPayableToAsset):"+numtostr(FQP.Quote["FBPA"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"归属母公司股东的权益/全部投入资本(SEWithoutMIToTotalCapital):"+numtostr(FQP.Quote["FSEC"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"带息债务/全部投入资本(InteBearDebtToTotalCapital):"+numtostr(FQP.Quote["FIBD"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"流动负债/负债合计(CurrentLiabilityToTL):"+numtostr(FQP.Quote["FCLT"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"非流动负债/负债合计(NonCurrentLiabilityToTL):"+numtostr(FQP.Quote["FNCL"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"股东权益比率(EquityToAsset):"+numtostr(FQP.Quote["FETA"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"权益乘数(EquityMultipler):"+numtostr(FQP.Quote["FEMP"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"营运资金(WorkingCapital):"+numtostr(FQP.Quote["FWKC"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"长期负债/股东权益合计(LongDebtToEquity):"+numtostr(FQP.Quote["FLDE"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"长期资产适合率(LongAssetFitRate):"+numtostr(FQP.Quote["FLAF"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"保守速动比率(SuperQuickRatio):"+numtostr(FQP.Quote["FSQR"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"产权比率(DebtEquityRatio):"+numtostr(FQP.Quote["FDER"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"归属母公司股东的权益/负债合计(SEWithoutMIToTL):"+numtostr(FQP.Quote["FSEL"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"归属母公司股东的权益/带息债务(SEWMIToInterestBearDebt):"+numtostr(FQP.Quote["FSED"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"有形净值债务率(DebtTangibleEquityRatio):"+numtostr(FQP.Quote["FDTE"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"有形净值/带息债务(TangibleAToInteBearDebt):"+numtostr(FQP.Quote["FTID"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"有形净值/净债务(TangibleAToNetDebt):"+numtostr(FQP.Quote["FTND"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"息税折旧摊销前利润/负债合计(EBITDAToTLiability):"+numtostr(FQP.Quote["FETL"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"经营活动产生现金流量净额/负债合计(NOCFToTLiability):"+numtostr(FQP.Quote["FNTL"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"经营活动产生现金流量净额/带息债务(NOCFToInterestBearDebt):"+numtostr(FQP.Quote["FNTD"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"经营活动产生现金流量净额/流动债务(NOCFToCurrentLiability):"+numtostr(FQP.Quote["FCFL"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"经营活动产生现金流量净额/净债务(NOCFToNetDebt):"+numtostr(FQP.Quote["FNND"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"利息保障倍数(InterestCover):"+numtostr(FQP.Quote["FICV"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"长期负债与营运资金比率(LongDebtToWorkingCapital):"+numtostr(FQP.Quote["FLDC"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"现金流动负债比(OperCashInToCurrentDebt):"+numtostr(FQP.Quote["FOCD"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"营业周期(OperCycle):"+numtostr(FQP.Quote["FOPC"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"存货周转天数(InventoryTDays):"+numtostr(FQP.Quote["FITD"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"应收账款周转率(ARTRate):"+numtostr(FQP.Quote["FRTR"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"应收账款周转天数(ARTDays):"+numtostr(FQP.Quote["FRTD"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"应付账款周转率(AccountsPayablesTRate):"+numtostr(FQP.Quote["FPTR"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"应付账款周转天数(AccountsPayablesTDays):"+numtostr(FQP.Quote["FPTD"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"流动资产周转率(CurrentAssetsTRate):"+numtostr(FQP.Quote["FCTR"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"股东权益周转率(EquityTRate):"+numtostr(FQP.Quote["FETR"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"利润总额同比增长(TotalProfitGrowRate):"+numtostr(FQP.Quote["FPGR"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"归属母公司股东的净利润同比增长(NPParentCompanyYOY):"+numtostr(FQP.Quote["FPPY"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"过去五年同期归属母公司净利润平均增幅(AvgNPYOYPastFiveYear):"+numtostr(FQP.Quote["FAPF"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"经营活动产生的现金流量净额同比增长(NetOperateCashFlowYOY):"+numtostr(FQP.Quote["FOCY"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"每股经营活动产生的现金流量净额同比增长(OperCashPSGrowRate):"+numtostr(FQP.Quote["FOCG"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"净资产收益率（摊薄）同比增长(NAORYOY):"+numtostr(FQP.Quote["FNRY"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"每股净资产相对年初增长率(EPSGrowRateYTD):"+numtostr(FQP.Quote["FEGD"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"归属母公司股东的权益相对年初增长率(SEWithoutMIGrowRateYTD):"+numtostr(FQP.Quote["FSGD"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"资产总计相对年初增长率(TAGrowRateYTD):"+numtostr(FQP.Quote["FAGD"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"可持续增长率(SustainableGrowRate):"+numtostr(FQP.Quote["FROI"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"销售商品提供劳务收到的现金/营业收入(SaleServiceCashToOR):"+numtostr(FQP.Quote["FSCO"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"经营活动产生的现金流量净额/营业收入(CashRateOfSales):"+numtostr(FQP.Quote["FCRS"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"经营活动产生的现金流量净额/经营活动净收益(NOCFToOperatingNI):"+numtostr(FQP.Quote["FOCO"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"资本支出/折旧和摊销(CapitalExpenditureToDM):"+numtostr(FQP.Quote["FCED"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"现金及现金等价物净增加额(CashEquivalentIncrease):"+numtostr(FQP.Quote["FCEI"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"销售商品提供劳务收到的现金(GoodsSaleServiceRenderCash):"+numtostr(FQP.Quote["FGSS"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"自由现金流量(FreeCashFlow):"+numtostr(FQP.Quote["FFCF"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"净利润现金含量(NetProfitCashCover):"+numtostr(FQP.Quote["FNPS"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"营业收入现金含量(OperatingRevenueCashCover):"+numtostr(FQP.Quote["FORC"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"总资产现金回收率(OperCashInToAsset):"+numtostr(FQP.Quote["FOCA"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"总股本(TotalShares):"+numtostr(FQP.Quote["CTSH"].DoubleValue[0],2)+spaces(4)+"备注：单位：（股）");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"已流通股份(LiquidShares):"+numtostr(FQP.Quote["CLSH"].DoubleValue[0],2)+spaces(4)+"备注：单位：（股）");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"流通A股(AShares):"+numtostr(FQP.Quote["CLAS"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"流通B股(BShares):"+numtostr(FQP.Quote["CLBS"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"流通H股(HShares):"+numtostr(FQP.Quote["CLHS"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"其他流通股(OtherLiquidShares):"+numtostr(FQP.Quote["COLS"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"流通受限股(RestrictedShares):"+numtostr(FQP.Quote["CRSH"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"流通受限A股(RestrictedAShares):"+numtostr(FQP.Quote["CRAS"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"流通受限B股(RestrictedBShares):"+numtostr(FQP.Quote["CRBS"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"其他受限股(OtherRestrictedShares):"+numtostr(FQP.Quote["CORS"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"未流通股份(NonListedShares):"+numtostr(FQP.Quote["CNLS"].DoubleValue[0],2)+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"上市板块(ListedSector):"+numtostr(FQP.Quote["SLSC"].DoubleValue[0],2)+spaces(4)+"备注：1-主板；2-中小板；3-三板；4-其他；5-大宗交易；6-创业板");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"上市状态(ListedState):"+numtostr(FQP.Quote["SLST"].DoubleValue[0],2)+spaces(4)+"备注：1-上市；2-暂停；3-终止；4-其他");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"一级行业代码(FisrtIndustryCode):"+FQP.Quote["SFIC"].StringValue[0]+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"一级行业名称(FisrtIndustry):"+FQP.Quote["SFIN"].StringValue[0]+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"二级行业代码(SecondIndustryCode):"+FQP.Quote["SSIC"].StringValue[0]+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"二级行业名称(SecondIndustry):"+FQP.Quote["SSIN"].StringValue[0]+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"三级行业代码(ThirdIndustryCode):"+FQP.Quote["STIC"].StringValue[0]+spaces(4)+"");
+		print(elsystem.DateTime.Now.ToString()+spaces(4)+"三级行业名称(ThirdIndustry):"+FQP.Quote["STIN"].StringValue[0]+spaces(4)+"");
+	End;
+End;
+
+//FQP更新事件
+method void FQP_Updated(elsystem.Object sender,tsdata.marketdata.FundamentalQuoteUpdatedEventArgs args)
+Begin
+
+End;
+
+</pre>
+
+<h2>附件</h2>
+
+<pre>无
+</pre>
+</div>
+
+<div>
+	<p align="left">Copyright  1998-2016 国信证券股份有限公司 版权所有</p>
+</div>
+</div>
+</body>
+</html>

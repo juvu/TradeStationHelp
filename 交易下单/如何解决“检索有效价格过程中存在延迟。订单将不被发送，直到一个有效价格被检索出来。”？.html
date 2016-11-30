@@ -1,0 +1,138 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+	<title>如何解决“检索有效价格过程中存在延迟。订单将不被发送，直到一个有效价格被检索出来。”？-交易下单-国信证券TradeStation帮助文档</title>
+    <script type="text/javascript" src="../scripts/shCore.js"></script>
+	<script type="text/javascript" src="../scripts/shBrushEL.js"></script>
+	<link type="text/css" rel="stylesheet" href="../styles/shCoreDefault.css"/>
+    <script type="text/javascript">SyntaxHighlighter.all();</script>
+	<link href="../styles.css" rel=stylesheet type="text/css">
+</head>
+<body>
+<div style="width:1000px;margin: 0 auto;">
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" bgcolor="#0062a6">
+  <tr>
+    <td width=5 height=5><IMG src="../images/tmenu/lt.gif" width=5 height=5></td>
+    <td></td>
+    <td><IMG src="../images/tmenu/rt.gif" width=5 height=5></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td valign="middle"><table width="100%"  border="0" cellspacing="0" cellpadding="5">
+      <tr valign="middle">
+        <td style="COLOR: #ffffff"><p style="COLOR: #ffffff; TEXT-ALIGN: justify; MARGIN-TOP: 0px">交易下单</p></td>
+				<td width="70" align="right">
+				<A href="#"><IMG border=0 alt=上一页 src="../images/previous.gif" width=17 height=17></a>
+				&nbsp; &nbsp;
+				<A href="#"><IMG border=0 alt=下一页 src="../images/next.gif" width=17 height=17></a>
+				</td>
+      </tr>
+    </table></td>
+    <td width=5></td>
+  </tr>
+  <tr>
+    <td width=5 height=5><IMG src="../images/tmenu/lb.gif" width=5 height=5></td>
+    <td></td>
+    <td width=5 height=5><IMG src="../images/tmenu/rb.gif" width=5 height=5></td>
+  </tr>
+</table>
+<div class=longtext>
+<h1>如何解决&ldquo;检索有效价格过程中存在延迟。订单将不被发送，直到一个有效价格被检索出来。&rdquo;？</h1>
+<pre>&nbsp;</pre>
+
+<div width=50%>
+
+<p>
+待办订单提示：检索有效价格过程中存在延迟。订单将不被发送，直到一个有效价格被检索出来。这是因为在用TradeStation下单（手动或EasyLanguage下单）时，会预先获取该只代码的盘口（行情）以验证委托是否有效（包括市价单和限价单），一般而言，这种情况在委托的期限与委托的类型不匹配时或代码为非法代码（不存在的代码）时会出现这个错误提示。此外，在EasyLanguage中用OrderTicket发单时，为了避免该问题，可以使用属性设置跳过本地验证，直接发送委托至服务器。
+</p>
+
+</div>
+
+
+<h2>示例1:如何跳过本地验证以避免该问题发生</h2>
+<pre class="brush: EasyLanguage;">
+using guosen;
+using elsystem;
+using tsdata.common; 
+using tsdata.marketdata;
+using elsystem.collections;
+
+vars:
+	guosen.OrderTicket otk1(null),
+	guosen.Order ord(null),
+	string accID("410038122059");//根据情况修改Account ID
+
+method void AnalysisTechnique_Initialized( elsystem.Object sender, elsystem.InitializedEventArgs args ) 
+begin
+	otk1 = new guosen.OrderTicket;	
+	otk1.Symbol = "000002.SZ";
+	otk1.Quantity = 100;
+	otk1.BypassClientValidation = True;//跳过本地验证
+	otk1.Account = accID;
+	otk1.Action = OrderAction.Buy;
+	otk1.SymbolType = tsdata.common.SecurityType.Stock;
+	otk1.Type = tsdata.trading.OrderType.Market;
+	otk1.Duration="AUT";
+	otk1.ExtendedProperties.SetItem("OrderName", "customOrderIDxxxxxxxx");
+	ord = otk1.Send();
+	ord.Updated += ord_Updated;//为该order对象绑定updated事件
+end;
+
+
+//Order 更新事件
+Method void ord_Updated(elsystem.Object sender,guosen.OrderUpdatedEventArgs args)
+vars:Order od;
+Begin
+	if(args.Order<>null)then
+	Begin
+		print(OrderToString(args.Order,";","="));
+	End;
+	
+End;
+
+//将一个Order对象的基本属性输出到字符串，并以sep分隔属性，以sepChar分隔键值对
+Method string OrderToString(Order ord,string sep,string sepChar)
+vars:string str,Vector vec_tmp,int loop;
+Begin
+	str = "";
+	vec_tmp = new Vector;
+	vec_tmp.Push_back("account" + sepChar + ord.AccountID);
+	vec_tmp.Push_back("action" + sepChar + ord.Action.ToString().ToLower());
+	vec_tmp.Push_back("Duration" + sepChar + ord.Duration.ToString().ToLower());
+	vec_tmp.Push_back("EnteredQuantity" + sepChar + ord.EnteredQuantity.ToString().ToLower());
+	vec_tmp.Push_back("EnteredTime" + sepChar + ord.EnteredTime.ToString().ToLower());
+	vec_tmp.Push_back("FilledQuantity" + sepChar + ord.FilledQuantity.ToString().ToLower());
+	vec_tmp.Push_back("FilledTime" + sepChar + ord.FilledTime.ToString().ToLower());
+	vec_tmp.Push_back("LimitPrice" + sepChar + ord.LimitPrice.ToString().ToLower());
+	vec_tmp.Push_back("OrderID" + sepChar + ord.OrderID.ToString().ToLower());
+	vec_tmp.Push_back("State" + sepChar + ord.State.ToString().ToLower());
+	vec_tmp.Push_back("StateDetail" + sepChar + ord.StateDetail.ToString().ToLower());
+	vec_tmp.Push_back("LimitPrice" + sepChar + ord.LimitPrice.ToString().ToLower());
+	vec_tmp.Push_back("Symbol" + sepChar + ord.Symbol.ToString().ToLower());
+	vec_tmp.Push_back("Type" + sepChar + ord.Type.ToString().ToLower());
+	vec_tmp.Push_back("LimitPrice" + sepChar + ord.LimitPrice.ToString().ToLower());
+	vec_tmp.Push_back("OrderName" + sepChar + ord.ExtendedProperties["OrderName"].ToString());
+	
+	for loop = 0 to vec_tmp.Count-1
+	Begin
+		str = str + vec_tmp[loop].ToString()+",";
+	End;
+	
+	Return str; 
+End;
+
+
+</pre>
+
+<h2>附件</h2>
+
+<pre>无
+</pre>
+</div>
+
+<div>
+	<p align="left">Copyright  1998-2016 国信证券股份有限公司 版权所有</p>
+</div>
+</div>
+</body>
+</html>

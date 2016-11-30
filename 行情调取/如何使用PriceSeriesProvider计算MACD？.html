@@ -1,0 +1,178 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+	<title>如何获得涨停跌停价？-行情调取-国信证券TradeStation帮助文档</title>
+    <script type="text/javascript" src="../scripts/shCore.js"></script>
+	<script type="text/javascript" src="../scripts/shBrushEL.js"></script>
+	<link type="text/css" rel="stylesheet" href="../styles/shCoreDefault.css"/>
+    <script type="text/javascript">SyntaxHighlighter.all();</script>
+	<link href="styles.css" rel=stylesheet type="text/css">
+</head>
+<body>
+<div style="width:1000px;margin: 0 auto;">
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" bgcolor="#0062a6">
+  <tr>
+    <td width=5 height=5><IMG src="images/tmenu/lt.gif" width=5 height=5></td>
+    <td></td>
+    <td><IMG src="images/tmenu/rt.gif" width=5 height=5></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td valign="middle"><table width="100%"  border="0" cellspacing="0" cellpadding="5">
+      <tr valign="middle">
+        <td style="COLOR: #ffffff"><p style="COLOR: #ffffff; TEXT-ALIGN: justify; MARGIN-TOP: 0px">行情调取</p></td>
+				<td width="70" align="right">
+				<A href="#"><IMG border=0 alt=上一页 src="../images/previous.gif" width=17 height=17></a>
+				&nbsp; &nbsp;
+				<A href="#"><IMG border=0 alt=下一页 src="../images/next.gif" width=17 height=17></a>
+				</td>
+      </tr>
+    </table></td>
+    <td width=5></td>
+  </tr>
+  <tr>
+    <td width=5 height=5><IMG src="images/tmenu/lb.gif" width=5 height=5></td>
+    <td></td>
+    <td width=5 height=5><IMG src="images/tmenu/rb.gif" width=5 height=5></td>
+  </tr>
+</table>
+<div class=longtext>
+<h1>如何使用PriceSeriesProvider计算MACD？</h1>
+<pre>&nbsp;</pre>
+
+<div width=50%>
+
+<p>
+一般而言，不推荐使用PriceSeriesProvider计算MACD，TradeStation系统内置函数MACD是一种计算MACD更好的方式。但是部分用户考虑到要计算MACD金叉等，需要计算不同周期的MACD，使用PriceSeriesProvider计算MACD并发出金叉信号等。其用法示例如示例一所示。
+</p>
+
+</div>
+
+
+<h2>示例1:使用PriceSeriesProvider计算MACD（雷达屏指标）</h2>
+<pre class="brush: EasyLanguage;">
+using tsdata.marketdata;
+using tsdata.common;
+
+inputs:
+	double FastLength( 12 ) [DisplayName = "FastLength", ToolTip = 
+	 "Enter number of bars to use in calculation of shorter length moving average."],
+	double SlowLength( 26 ) [DisplayName = "SlowLength", ToolTip = 
+	 "Enter number of bars to use in calculation of longer length moving average."],
+	double MACDLength( 9 ),
+	int MACDDiff_Up_Color( UpColorDefault ),
+	int MACDDiff_Down_Color( DownColorDefault ) 
+	 ;
+vars:
+	intrabarpersist int PSPLength(60),
+	intrabarpersist PriceSeriesProvider PSP(null),
+	intrabarpersist int cc(0);//样本天数，从当前向前溯多少根Bar计算EMA。注意：该值不得大于PSP.count
+	
+method void PSP_Updated( elsystem.Object sender, tsdata.marketdata.PriceSeriesUpdatedEventArgs args ) 
+vars:double EMAF,double EMAS,double MyMACD,double MACDAvg,double MACDDiff,double HistogramColor;
+begin
+	if(PSP.State = DataState.loading)then
+	Begin
+		plot4("加载中","状态",white);
+	End
+	
+	else if(PSP.State = DataState.failed)then	
+	Begin
+		plot4("失败","状态",white);
+	End
+	
+	
+	else if(PSP.State = DataState.Loaded)then
+	Begin
+		print("Loaded");
+		HistogramColor = IFF( MACDDiff > 0, MACDDiff_Up_Color, MACDDiff_Down_Color );
+		EMAF = xAvg(PSP.Close,FastLength,0);
+		EMAS = xAvg(PSP.Close,SlowLength,0);
+		MyMACD = EMAF - EMAS;
+		MACDAvg = calcMACDAvg(PSP.Close,MACDLength,0);
+		MACDDiff =  MyMACD - MACDAvg;
+		plot1(MyMACD,!( "MACD" ),red);
+		plot2(MACDAvg,!( "MACDAvg" ),red);
+		Plot3( MACDDiff, !( "MACDDiff" ), HistogramColor );
+		plot4("完成","状态",white);
+	End
+	Else
+	Begin
+		plot4("数据不足","状态",white);
+	End;
+end;
+
+method double calcMyMACD(DoubleSeries col,int count)
+Begin
+	Return xAvg(col,FastLength,count) - xAvg(col,SlowLength,count);
+End;
+
+//递归函数
+Method double calcMACDAvg(DoubleSeries col, int length,int count)
+vars:double SmoothingFactor;
+Begin
+	if Length >= 0 then
+		SmoothingFactor =  2 / ( Length + 1 )
+	else
+		RaiseRuntimeError( !( "The Length input of the XAverage function must be " +
+		 "greater than or equal to 0." ) ) ;
+	if(count = col.Count)then
+	Begin
+		Return calcMyMACD(col,count-1); 
+	End;
+	Return SmoothingFactor*calcMyMACD(col,count) + (1-SmoothingFactor) * calcMACDAvg(col,length,count+1);
+End;
+
+//递归函数
+Method double xAvg(DoubleSeries col, int length,int count)
+vars:double SmoothingFactor;
+Begin
+	if Length >= 0 then
+		SmoothingFactor =  2 / ( Length + 1 )
+	else
+		RaiseRuntimeError( !( "The Length input of the XAverage function must be " +
+		 "greater than or equal to 0." ) ) ;
+	if(count = col.Count)then
+	Begin
+		Return col[count-1];
+	End;
+	Return col[count] * SmoothingFactor + (1-SmoothingFactor) * xAvg(col,length,count+1);
+End;
+
+
+method void AnalysisTechnique_Initialized( elsystem.Object sender, elsystem.InitializedEventArgs args ) 
+begin
+	if(PSPLength < SlowLength)then
+	Begin
+		PSPLength = SlowLength; //如果输入的PSPLength 少于SlowLength长度，增加引用数据
+	End;
+	PSP = new PriceSeriesProvider;
+	PSP.Load = False;
+	PSP.Symbol = symbol;
+	PSP.Interval.IntervalType = tsdata.marketdata.DataIntervalType.Minutes;//周期单位为分钟
+	PSP.Interval.IntervalSpan = 30;  //也即30分钟线
+	PSP.Range.Type = tsdata.marketdata.DataRangeType.Bars;//设置PSP载入的条数
+	PSP.Range.Bars = PSPLength ; //设置为 EMAinit+1 条
+	PSP.IncludeVolumeInfo = false;
+	PSP.IncludeTicksInfo = false;
+	PSP.UseNaturalHours = false;
+	PSP.Realtime = TRUE; //设置为实时更新
+	PSP.TimeZone = tsdata.common.TimeZone.local;
+	PSP.Updated += PSP_Updated; //绑定更新事件，当PSP更新后刷新绘图
+	PSP.Load = TRUE;
+end;
+
+</pre>
+
+<h2>附件</h2>
+
+<pre>无
+</pre>
+</div>
+
+<div>
+	<p align="left">Copyright  1998-2016 国信证券股份有限公司 版权所有</p>
+</div>
+</div>
+</body>
+</html>

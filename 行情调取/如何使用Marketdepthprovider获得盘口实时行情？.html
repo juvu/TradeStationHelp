@@ -1,7 +1,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
-	<title>如何获得涨停跌停价？-行情调取-国信证券TradeStation帮助文档</title>
+	<title>如何使用Marketdepthprovider获得盘口实时行情？-行情调取-国信证券TradeStation帮助文档</title>
     <script type="text/javascript" src="../scripts/shCore.js"></script>
 	<script type="text/javascript" src="../scripts/shBrushEL.js"></script>
 	<link type="text/css" rel="stylesheet" href="../styles/shCoreDefault.css"/>
@@ -37,48 +37,108 @@
   </tr>
 </table>
 <div class=longtext>
-<h1>如何获得涨停跌停价？</h1>
+<h1>如何使用Marketdepthprovider获得盘口实时行情？</h1>
 <pre>&nbsp;</pre>
 
 <div width=50%>
 
 <p>
-使用保留字（Reserve Word）不能直接获得涨停价或跌停价。
-国信TradeStation提供QuotesProvider在EasyLanguage中获取代码的涨停价和跌停价。
+如何Marketdepthprovider可以获得代码的盘口实时买卖量价数据。
 具体用法见示例。
 </p>
 
 </div>
 
 
-<h2>示例1:使用QuotesProvider获得涨停价或跌停价</h2>
+<h2>示例1:使用Marketdepthprovider获得盘口实时行情</h2>
 <pre class="brush: EasyLanguage;">
-using guosen;
-using tsdata.common;
 using tsdata.marketdata;
-
-
-vars:QuotesProvider QP(null);
+using guosen;
+using elsystem;
+using elsystem.windows.forms;
+ 
+vars:MarketDepthProvider MDP(null);
 method void AnalysisTechnique_Initialized( elsystem.Object sender, elsystem.InitializedEventArgs args ) 
 begin
-	QP = new QuotesProvider;
-	QP.Load = false;
-	QP.Symbol = "000001.SZ";//设置股票代码
-	QP.fields += "highLimit,LowLimit";//属性可增可减，不区分大小写，但需用逗号分隔开来
-	QP.Updated += QP_Updated; //为QuotesProvider绑定更新事件 
-	QP.Load = true;         
+	MDP = new MarketDepthProvider;
+	MDP.Symbol = "000981.SZ";
+	MDP.Realtime = TRUE;
+	MDP.MaximumLevelCount = 10;
+	MDP.Updated += MDP_Updated;
+	MDP.Load = TRUE;
+	
 end;
-
-Method void QP_Updated(elsystem.Object sender,tsdata.marketdata.QuoteUpdatedEventArgs args)
+ 
+Method void MDP_Updated(elsystem.Object sender,MarketDepthUpdatedEventArgs args)
+vars:int x;
 Begin
-	if(QP.State=DataState.loaded)then
-	Begin
-		Print("HighLimit: "+ numtostr(QP.Quote["HighLimit"].Int64Value,0) + //代码名称
-			 " LowLimit:" + numtostr(QP.Quote["HighLimit"].Int64Value,0)  //最新价
-			 );
-	End;
+	print(MergeStr());
 End;
-//打印语句输出栏结果示例：HighLimit: 100900 LowLimit:100900
+
+//merge the string
+Method string MergeStr()
+vars:string str,int loop;
+Begin
+	str = numtostr(date+19000000,0)+","+numtostr(time,0); //convert to natural date
+	print(MDP.AskLevels.Count," ",MDP.BidLevels.Count);
+	For loop = 0 to MDP.AskLevels.Count-1
+	Begin
+		str = str + "," + AskP(loop) + "," + AskS(loop);
+	End;
+	For value1 = 0 to MDP.BidLevels.Count-1
+	Begin
+		str = str + "," + BidP(loop) + "," + BidS(loop);
+	End;
+	Return str;
+End;
+
+//Ask price to string
+Method string AskP(int level)
+vars:string nu;
+Begin
+	nu = "";
+	try
+		nu = numtostr(MDP.Asks[level].Price,2);
+	catch(elsystem.Exception ex)
+	End;
+	return nu;
+End;
+
+//Ask Size to string
+Method string AskS(int level)
+vars:string nu;
+Begin
+	nu = "";
+	try
+		nu = numtostr(MDP.Asks[level].Size,2);	
+	catch(elsystem.Exception ex)
+	End;
+	return nu;
+End;
+
+//Bid price to string
+Method string BidP(int level)
+vars:string nu;
+Begin
+	nu = "";
+	try
+		nu = numtostr(MDP.Bids[level].Price,2);
+	catch(elsystem.Exception ex)
+	End;
+	return nu;
+End;
+
+//Bid size to string
+Method string BidS(int level)
+vars:string nu;
+Begin
+	nu = "";
+	try
+		nu = numtostr(MDP.Bids[level].Size,2);
+	catch(elsystem.Exception ex)
+	End;
+	return nu;
+End;
 
 </pre>
 
