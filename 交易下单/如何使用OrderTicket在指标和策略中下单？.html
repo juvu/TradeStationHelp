@@ -1,7 +1,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
-	<title>如何使用PartialFillInfoCollection查询Order的委托分笔成交明细？-交易下单-国信证券TradeStation帮助文档</title>
+	<title>如何使用OrderTicket在指标和策略中下单？-交易下单-国信证券TradeStation帮助文档</title>
     <script type="text/javascript" src="../scripts/shCore.js"></script>
 	<script type="text/javascript" src="../scripts/shBrushEL.js"></script>
 	<link type="text/css" rel="stylesheet" href="../styles/shCoreDefault.css"/>
@@ -37,61 +37,75 @@
   </tr>
 </table>
 <div class=longtext>
-<h1>如何使用PartialFillInfoCollection查询Order的委托分笔成交明细？</h1>
+<h1>如何使用OrderTicket在指标和策略中下单？</h1>
 <pre>&nbsp;</pre>
 
 <div width=50%>
 
 <p>
-使用PartialFillInfoCollection在OrderUpdatedEvent中可以获得部分成交明细信息。
-具体用法见示例一。
+使用guosen.OrderTicket可以发送委托单，一般而言，必须要指定必要的字段属性，否则会导致OrderTicket发送失败，而且不同品种的委托要求的必填字段和属性设置不尽相同。下面以最常使用的股票市价单和股票限价单为例。
 </p>
 
 </div>
 
 
-<h2>示例1:使用QuotesProvider获得涨停价或跌停价</h2>
+<h2>示例1:使用OrderTicket发送股票市价单</h2>
 <pre class="brush: EasyLanguage;">
-
 using guosen;
 using elsystem;
+using tsdata.common; 
+using tsdata.marketdata;
 using elsystem.collections;
-using tsdata.common;
 
-vars:OrdersProvider  OP(null);
+vars:
+	guosen.OrderTicket otk1(null),
+	guosen.Order ord(null),
+	string accID("410038122059");//根据情况修改Account ID
 
 method void AnalysisTechnique_Initialized( elsystem.Object sender, elsystem.InitializedEventArgs args ) 
 begin
-	OP = new OrdersProvider; 
-	OP.Realtime = TRUE;
-	OP.Updated += OP_Updated;
-	OP.Load = TRUE;
+	otk1 = new guosen.OrderTicket;	
+	otk1.Symbol = "000002.SZ";
+	otk1.Quantity = 100;
+	otk1.BypassClientValidation = True;//跳过本地验证
+	otk1.Account = accID;
+	otk1.Action = OrderAction.Buy;
+	otk1.SymbolType = tsdata.common.SecurityType.Stock;
+	otk1.Type = tsdata.trading.OrderType.Market;//市价单
+	otk1.Duration="AUT";//自动选择期限
+	otk1.ExtendedProperties.SetItem("OrderName", "customOrderIDxxxxxxxx");//自定义的OrderName
+	ord = otk1.Send();//发送委托
 end;
+</pre>
 
-Method void OP_Updated(elsystem.Object sender,OrderUpdatedEventArgs args)
-vars:guosen.Order od,guosen.PartialFillInfoCollection PFC,int loop;
-Begin
-	if(args.Order<>null)then
-	Begin
-		od = args.Order astype guosen.Order;
-		PFC = args.PartialFills astype PartialFillInfoCollection;
-		print("--------Begin------------");
-		for loop = 0 to PFC.Count-1
-		Begin
-			print("[",numtostr(loop+1,0),"]:",
-            numtostr(PFC[loop].FilledPrice,2)," ",
-            numtostr(PFC[loop].FilledQuantity,0)," ",
-            PFC[loop].FilledTime.ToString());
-		End;
-		print("---------End-------------",newline);
-	End;
-End;
-//打印语句输出栏结果示例：
-//--------Begin------------
-//[1]:14.08 500 2016/11/30 6:58:00
-//[2]:14.08 250 2016/11/30 6:58:00
-//---------End-------------
+<h2>示例2:使用OrderTicket发送股票限价单</h2>
+<pre class="brush: EasyLanguage;">
+using guosen;
+using elsystem;
+using tsdata.common; 
+using tsdata.marketdata;
+using elsystem.collections;
 
+vars:
+	guosen.OrderTicket otk1(null),
+	guosen.Order ord(null),
+	string accID("410038122059");//根据情况修改Account ID
+
+method void AnalysisTechnique_Initialized( elsystem.Object sender, elsystem.InitializedEventArgs args ) 
+begin
+	otk1 = new guosen.OrderTicket;	
+	otk1.Symbol = "601988.SH";
+	otk1.Quantity = 100;
+	otk1.BypassClientValidation = True;//跳过本地验证
+	otk1.Account = accID;
+	otk1.Action = OrderAction.Buy;
+	otk1.SymbolType = tsdata.common.SecurityType.Stock;
+	otk1.Type = tsdata.trading.OrderType.Limit;//限价单
+    otk1.LimitPrice = 3.51;//限价
+	otk1.Duration="AUT";//自动选择期限
+	otk1.ExtendedProperties.SetItem("OrderName", "customOrderIDxxxxxxxx");//自定义的OrderName
+	ord = otk1.Send();//发送委托
+end;
 </pre>
 
 <h2>附件</h2>
