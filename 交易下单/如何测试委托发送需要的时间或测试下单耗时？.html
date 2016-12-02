@@ -1,7 +1,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
-	<title>如何获得涨停跌停价？-交易下单-国信证券TradeStation帮助文档</title>
+	<title>如何测试委托发送需要的时间或测试下单耗时？-交易下单-国信证券TradeStation帮助文档</title>
     <script type="text/javascript" src="../scripts/shCore.js"></script>
 	<script type="text/javascript" src="../scripts/shBrushEL.js"></script>
 	<link type="text/css" rel="stylesheet" href="../styles/shCoreDefault.css"/>
@@ -37,48 +37,62 @@
   </tr>
 </table>
 <div class=longtext>
-<h1>如何获得涨停跌停价？</h1>
+<h1>如何测试委托发送需要的时间或测试下单耗时？</h1>
 <pre>&nbsp;</pre>
 
 <div width=50%>
 
 <p>
-使用保留字（Reserve Word）不能直接获得涨停价或跌停价。
-国信TradeStation提供QuotesProvider在EasyLanguage中获取代码的涨停价和跌停价。
-具体用法见示例。
+EasyLanguage 中的DateTime可以精确到秒，但是往往委托从发出到返回成交信息耗时不超过1秒，故而无法用DateTime记录系统时间的方式测试发单耗时（从订单发出到收到成交汇报）。但是EasyLanguage提供额外的一种方法StopWatch (可以记录从watch start之后经过的时间，精确至毫秒)测试发单耗时。
 </p>
 
 </div>
 
 
-<h2>示例1:使用QuotesProvider获得涨停价或跌停价</h2>
+<h2>示例1:使用StopWatch 测试发单耗时</h2>
 <pre class="brush: EasyLanguage;">
+
 using guosen;
+using elsystem;
 using tsdata.common;
 using tsdata.marketdata;
 
+vars:
+	guosen.OrderTicket otk1(null),
+	guosen.Order ord(null), 
+	StopWatch swatch(null),
+	string accID("410038122059");
 
-vars:QuotesProvider QP(null);
 method void AnalysisTechnique_Initialized( elsystem.Object sender, elsystem.InitializedEventArgs args ) 
 begin
-	QP = new QuotesProvider;
-	QP.Load = false;
-	QP.Symbol = "000001.SZ";//设置股票代码
-	QP.fields += "highLimit,LowLimit";//属性可增可减，不区分大小写，但需用逗号分隔开来
-	QP.Updated += QP_Updated; //为QuotesProvider绑定更新事件 
-	QP.Load = true;         
+	swatch = new StopWatch;
+	otk1 = new guosen.OrderTicket;	
+	otk1.Symbol = "000002.SZ";
+	otk1.Quantity = 100;
+	otk1.Account = accID;
+	otk1.Action = OrderAction.Buy;
+	otk1.SymbolType = tsdata.common.SecurityType.Stock;
+	otk1.Type = tsdata.trading.OrderType.Limit;
+	otk1.Duration="GFD";
+	otk1.LimitPrice = 26.28;
+	ord = otk1.Send();
+	swatch.Start(); //订单发送后开始计时
+	ord.Updated += ord_Updated;
 end;
 
-Method void QP_Updated(elsystem.Object sender,tsdata.marketdata.QuoteUpdatedEventArgs args)
+Method void ord_Updated(elsystem.Object sender,guosen.OrderUpdatedEventArgs args)
 Begin
-	if(QP.State=DataState.loaded)then
+	print(DateTime.Now.ToString()+ "," +args.OrderID.ToString()+","+args.State.ToString()+",ElapsedMilliseconds: ",swatch.ElapsedMilliseconds ," ms");
+	if(args.State = OrderState.Filled)then
 	Begin
-		Print("HighLimit: "+ numtostr(QP.Quote["HighLimit"].Int64Value,0) + //代码名称
-			 " LowLimit:" + numtostr(QP.Quote["HighLimit"].Int64Value,0)  //最新价
-			 );
+		swatch.Stop();
 	End;
 End;
-//打印语句输出栏结果示例：HighLimit: 100900 LowLimit:100900
+//打印语句输出栏结果示例：
+//2016/12/1 9:59:18,,sending,ElapsedMilliseconds:   21.00 ms
+//2016/12/1 9:59:18,0-_410-0381-2205-9_20-1612-01_1-0397-9313,received,ElapsedMilliseconds:   60.00 ms
+//2016/12/1 9:59:18,0-_410-0381-2205-9_20-1612-01_1-0397-9313,filled,ElapsedMilliseconds:  191.00 ms
+
 
 </pre>
 
