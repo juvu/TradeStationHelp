@@ -1,7 +1,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
-	<title>如何获得涨停跌停价？-交易下单-国信证券TradeStation帮助文档</title>
+	<title>如何实时获得账号资金信息？-账户信息-国信证券TradeStation帮助文档</title>
     <script type="text/javascript" src="../scripts/shCore.js"></script>
 	<script type="text/javascript" src="../scripts/shBrushEL.js"></script>
 	<link type="text/css" rel="stylesheet" href="../styles/shCoreDefault.css"/>
@@ -20,7 +20,7 @@
     <td></td>
     <td valign="middle"><table width="100%"  border="0" cellspacing="0" cellpadding="5">
       <tr valign="middle">
-        <td style="COLOR: #ffffff"><p style="COLOR: #ffffff; TEXT-ALIGN: justify; MARGIN-TOP: 0px">交易下单</p></td>
+        <td style="COLOR: #ffffff"><p style="COLOR: #ffffff; TEXT-ALIGN: justify; MARGIN-TOP: 0px">账户信息</p></td>
 				<td width="70" align="right">
 				<A href="#"><IMG border=0 alt=上一页 src="../images/previous.gif" width=17 height=17></a>
 				
@@ -37,48 +37,66 @@
   </tr>
 </table>
 <div class=longtext>
-<h1>如何获得涨停跌停价？</h1>
+<h1>如何实时获得账号资金信息？</h1>
 <pre>&nbsp;</pre>
 
 <div width=50%>
 
 <p>
-使用保留字（Reserve Word）不能直接获得涨停价或跌停价。
-国信TradeStation提供QuotesProvider在EasyLanguage中获取代码的涨停价和跌停价。
-具体用法见示例。
+EasyLanguage 提供AccountsProvider用来获得实时的账户信息。
 </p>
 
 </div>
 
 
-<h2>示例1:使用QuotesProvider获得涨停价或跌停价</h2>
+<h2>示例1:使用AccountsProvider获得资金账户信息</h2>
 <pre class="brush: EasyLanguage;">
 using guosen;
-using tsdata.common;
 using tsdata.marketdata;
+using elsystem.collections;
 
-
-vars:QuotesProvider QP(null);
+vars:AccountsProvider AP(null);
 method void AnalysisTechnique_Initialized( elsystem.Object sender, elsystem.InitializedEventArgs args ) 
 begin
-	QP = new QuotesProvider;
-	QP.Load = false;
-	QP.Symbol = "000001.SZ";//设置股票代码
-	QP.fields += "highLimit,LowLimit";//属性可增可减，不区分大小写，但需用逗号分隔开来
-	QP.Updated += QP_Updated; //为QuotesProvider绑定更新事件 
-	QP.Load = true;         
+	AP = new AccountsProvider;
+	AP.Realtime = True;
+	AP.Load = true;
+	AP.StateChanged += AP_StateChanged;	
 end;
 
-Method void QP_Updated(elsystem.Object sender,tsdata.marketdata.QuoteUpdatedEventArgs args)
+Method void AP_StateChanged(elsystem.Object sender,tsdata.common.StateChangedEventArgs args)
+vars: int loop;
 Begin
-	if(QP.State=DataState.loaded)then
+	For loop= 0 to AP.Count-1
 	Begin
-		Print("HighLimit: "+ numtostr(QP.Quote["HighLimit"].Int64Value,0) + //代码名称
-			 " LowLimit:" + numtostr(QP.Quote["HighLimit"].Int64Value,0)  //最新价
-			 );
+		print(AcctToString(AP[0]));
 	End;
 End;
+
+Method string AcctToString(Account Act)
+vars:string str,Vector vec_tmp,int loop,string sepChar;
+Begin
+	sepChar = "=";
+	str = "";
+    vec_tmp = new Vector;
+    vec_tmp.Push_back("资金账号" + sepChar + Act.AccountID);
+    vec_tmp.Push_back("类型" + sepChar + Act.Type.ToString());
+    vec_tmp.Push_back("总资产" + sepChar + numtostr(Act.RTAccountNetWorth,2));
+    vec_tmp.Push_back("账户余额" + sepChar + numtostr(Act.RTCashBalance,2));
+    vec_tmp.Push_back("可用资金 " + sepChar + numtostr(Act.RTDayTradingBuyingPower,2));
+    vec_tmp.Push_back("持仓市值" + sepChar + numtostr(Act.RTPositionsMarketValue,2));
+    vec_tmp.Push_back("浮动盈亏" + sepChar + numtostr(Act.RTUnrealizedPL ,2));
+    
+    for loop = 0 to vec_tmp.Count-1
+    Begin
+        str = str + vec_tmp[loop].ToString()+",";
+    End;
+     
+    Return str; 
+End;
 //打印语句输出栏结果示例：HighLimit: 100900 LowLimit:100900
+//资金账号=410009982318,类型=margin,总资产=100000164.80,账户余额=100000000.00,可用资金 =100000164.80,持仓市值=0.00,浮动盈亏=0.00,
+//资金账号=410009982318,类型=margin,总资产=100000164.80,账户余额=100000000.00,可用资金 =100000164.80,持仓市值=0.00,浮动盈亏=0.00,
 
 </pre>
 

@@ -1,12 +1,12 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
-	<title>如何获得涨停跌停价？-交易下单-国信证券TradeStation帮助文档</title>
+	<title>什么情况下Order会变成CancelPending状态？-交易下单-国信证券TradeStation帮助文档</title>
     <script type="text/javascript" src="../scripts/shCore.js"></script>
 	<script type="text/javascript" src="../scripts/shBrushEL.js"></script>
 	<link type="text/css" rel="stylesheet" href="../styles/shCoreDefault.css"/>
     <script type="text/javascript">SyntaxHighlighter.all();</script>
-	<link href="../styles.css" rel=stylesheet type="text/css">
+	<link href="../交易下单/styles.css" rel=stylesheet type="text/css">
 </head>
 <body>
 <div style="width:1000px;margin: 0 auto;">
@@ -37,50 +37,27 @@
   </tr>
 </table>
 <div class=longtext>
-<h1>如何获得涨停跌停价？</h1>
+<h1>什么情况下Order会变成CancelPending状态？</h1>
 <pre>&nbsp;</pre>
 
 <div width=50%>
 
 <p>
-使用保留字（Reserve Word）不能直接获得涨停价或跌停价。
-国信TradeStation提供QuotesProvider在EasyLanguage中获取代码的涨停价和跌停价。
-具体用法见示例。
+Order 变成CancelPending状态意味着平台尝试去取消委托，但是尚未从后端接收到任何响应（包括撤单失败的响应）。如果一个委托变为此状态一段时间并且该委托仍然未被撤销，那么手动的撤单是必须的。
+</p>
+<p>
+（The order state of CancelPending means that the platform tried to cancel the order, but has not yet received a response from the back-end. If the order is not cancelled within a short period of time after the appearance of this order state, manual intervention may be required.）
 </p>
 
 </div>
 
 
-<h2>示例1:使用QuotesProvider获得涨停价或跌停价</h2>
+<h2></h2>
+<!--
 <pre class="brush: EasyLanguage;">
-using guosen;
-using tsdata.common;
-using tsdata.marketdata;
-
-
-vars:QuotesProvider QP(null);
-method void AnalysisTechnique_Initialized( elsystem.Object sender, elsystem.InitializedEventArgs args ) 
-begin
-	QP = new QuotesProvider;
-	QP.Load = false;
-	QP.Symbol = "000001.SZ";//设置股票代码
-	QP.fields += "highLimit,LowLimit";//属性可增可减，不区分大小写，但需用逗号分隔开来
-	QP.Updated += QP_Updated; //为QuotesProvider绑定更新事件 
-	QP.Load = true;         
-end;
-
-Method void QP_Updated(elsystem.Object sender,tsdata.marketdata.QuoteUpdatedEventArgs args)
-Begin
-	if(QP.State=DataState.loaded)then
-	Begin
-		Print("HighLimit: "+ numtostr(QP.Quote["HighLimit"].Int64Value,0) + //代码名称
-			 " LowLimit:" + numtostr(QP.Quote["HighLimit"].Int64Value,0)  //最新价
-			 );
-	End;
-End;
-//打印语句输出栏结果示例：HighLimit: 100900 LowLimit:100900
 
 </pre>
+-->
 
 <h2>附件</h2>
 

@@ -1,0 +1,128 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+	<title>如何获得涨停跌停价？-交易下单-国信证券TradeStation帮助文档</title>
+    <script type="text/javascript" src="../scripts/shCore.js"></script>
+	<script type="text/javascript" src="../scripts/shBrushEL.js"></script>
+	<link type="text/css" rel="stylesheet" href="../styles/shCoreDefault.css"/>
+    <script type="text/javascript">SyntaxHighlighter.all();</script>
+	<link href="../styles.css" rel=stylesheet type="text/css">
+</head>
+<body>
+<div style="width:1000px;margin: 0 auto;">
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" bgcolor="#0062a6">
+  <tr>
+    <td width=5 height=5><IMG src="../images/tmenu/lt.gif" width=5 height=5></td>
+    <td></td>
+    <td><IMG src="../images/tmenu/rt.gif" width=5 height=5></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td valign="middle"><table width="100%"  border="0" cellspacing="0" cellpadding="5">
+      <tr valign="middle">
+        <td style="COLOR: #ffffff"><p style="COLOR: #ffffff; TEXT-ALIGN: justify; MARGIN-TOP: 0px">交易下单</p></td>
+				<td width="70" align="right">
+				<A href="#"><IMG border=0 alt=上一页 src="../images/previous.gif" width=17 height=17></a>
+				
+				<A href="#"><IMG border=0 alt=下一页 src="../images/next.gif" width=17 height=17></a>
+				</td>
+      </tr>
+    </table></td>
+    <td width=5></td>
+  </tr>
+  <tr>
+    <td width=5 height=5><IMG src="../images/tmenu/lb.gif" width=5 height=5></td>
+    <td></td>
+    <td width=5 height=5><IMG src="../images/tmenu/rb.gif" width=5 height=5></td>
+  </tr>
+</table>
+<div class=longtext>
+<h1>发送委托后如何撤单？</h1>
+<pre>&nbsp;</pre>
+
+<div width=50%>
+
+<p>
+使用保留字buy、sell、sellshort、BuyToCover 发出的委托单咱是未提供用EL指令撤单的方法。
+</p>
+
+<p>
+使用对象guosen.OrderTicket 发出的委托单，可以用Order.Cancel() 撤单。OrderTicket 的send方法在发送委托的同时会返回包含该委托信息的Order对象，通过Order.CanCancel() 可以查看该Order对象是否可以撤单，若是该值为True，那么可以通过Order.Cancel()方法发出该委托的撤单操作。
+</p>
+<p>
+值得一提的是，如果是在模拟环境中，可以通过设置委托为限价单，委托数量为12100（成交一半），12200（委托不会成交）的方式测试撤单指令。
+</p>
+</div>
+
+
+<h2>示例1:使用order.cancel() 撤单</h2>
+<pre class="brush: EasyLanguage;">
+
+using guosen;
+using elsystem;
+using tsdata.common;
+using tsdata.marketdata;
+
+vars:
+	guosen.OrderTicket otk1(null),
+	guosen.Order ord(null), 
+	string accID("410038122059");
+
+method void AnalysisTechnique_Initialized( elsystem.Object sender, elsystem.InitializedEventArgs args ) 
+begin
+	otk1 = new guosen.OrderTicket;	
+	otk1.Symbol = "000002.SZ";
+	otk1.Quantity = 100;
+	otk1.Account = accID;
+	otk1.Action = OrderAction.Buy;
+	otk1.SymbolType = tsdata.common.SecurityType.Stock;
+	otk1.Type = tsdata.trading.OrderType.Limit;
+	otk1.Duration="GFD";
+	otk1.BypassClientValidation = true;
+	otk1.LimitPrice = 26.28;
+	ord = otk1.Send();
+	ord.Updated += ord_Updated;
+	if(ord.CanCancel())then
+	Begin
+		ord.Cancel();
+	End;
+end;
+
+Method void ord_Updated(elsystem.Object sender,guosen.OrderUpdatedEventArgs args)
+vars:Order od;
+Begin
+	od = sender astype Order;
+	print(DateTime.Now.ToString()+ "," 
+        +args.OrderID.ToString()+","
+        +args.State.ToString()+","
+        +od.StateDetail.ToString());
+End;
+
+//打印语句输出栏结果示例
+//2016/12/5 14:01:48,0-_410-0381-2205-9_20-1612-05_1-0403-8236,queued,queued
+//2016/12/5 14:01:48,0-_410-0381-2205-9_20-1612-05_1-0403-8236,received,received
+//2016/12/5 14:01:50,0-_410-0381-2205-9_20-1612-05_1-0403-8236,filled,filled
+//2016/12/5 14:02:05,,sending,sending
+//2016/12/5 14:02:05,0-_410-0381-2205-9_20-1612-05_1-0404-6224,received,received
+//2016/12/5 14:02:05,0-_410-0381-2205-9_20-1612-05_1-0404-6224,received,received
+//2016/12/5 14:02:05,0-_410-0381-2205-9_20-1612-05_1-0404-6224,partiallyfilled,partialfillalive
+//2016/12/5 14:02:05,0-_410-0381-2205-9_20-1612-05_1-0404-6224,partiallyfilledurout,partialfillurout
+//2016/12/5 14:02:15,,sending,sending
+//2016/12/5 14:02:15,0-_410-0381-2205-9_20-1612-05_1-0403-7216,received,received
+//2016/12/5 14:02:15,0-_410-0381-2205-9_20-1612-05_1-0403-7216,received,received
+//2016/12/5 14:02:16,0-_410-0381-2205-9_20-1612-05_1-0403-7216,canceled,urout
+
+</pre>
+
+<h2>附件</h2>
+
+<pre>无
+</pre>
+</div>
+
+<div>
+	<p align="left">Copyright  1998-2016 国信证券股份有限公司 版权所有</p>
+</div>
+</div>
+</body>
+</html>

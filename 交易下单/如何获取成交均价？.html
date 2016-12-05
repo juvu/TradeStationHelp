@@ -1,12 +1,12 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
-	<title>如何获得涨停跌停价？-交易下单-国信证券TradeStation帮助文档</title>
+	<title>如何获取成交均价？-交易下单-国信证券TradeStation帮助文档</title>
     <script type="text/javascript" src="../scripts/shCore.js"></script>
 	<script type="text/javascript" src="../scripts/shBrushEL.js"></script>
 	<link type="text/css" rel="stylesheet" href="../styles/shCoreDefault.css"/>
     <script type="text/javascript">SyntaxHighlighter.all();</script>
-	<link href="../styles.css" rel=stylesheet type="text/css">
+	<link href="../交易下单/styles.css" rel=stylesheet type="text/css">
 </head>
 <body>
 <div style="width:1000px;margin: 0 auto;">
@@ -37,48 +37,59 @@
   </tr>
 </table>
 <div class=longtext>
-<h1>如何获得涨停跌停价？</h1>
+<h1>如何获取成交均价？</h1>
 <pre>&nbsp;</pre>
 
 <div width=50%>
 
 <p>
-使用保留字（Reserve Word）不能直接获得涨停价或跌停价。
-国信TradeStation提供QuotesProvider在EasyLanguage中获取代码的涨停价和跌停价。
+使用保留字（Reserve Word）不能直接获得成交均价字段。
+使用OrderTicket发送的委托可以通过Order对象获得其平均成交价格。
 具体用法见示例。
 </p>
 
 </div>
 
 
-<h2>示例1:使用QuotesProvider获得涨停价或跌停价</h2>
+<h2>示例1:使用Order获得成交均价</h2>
 <pre class="brush: EasyLanguage;">
 using guosen;
+using elsystem;
 using tsdata.common;
 using tsdata.marketdata;
 
+vars:
+	guosen.OrderTicket otk1(null),
+	guosen.Order ord(null), 
+	string accID("410038122059");
 
-vars:QuotesProvider QP(null);
 method void AnalysisTechnique_Initialized( elsystem.Object sender, elsystem.InitializedEventArgs args ) 
 begin
-	QP = new QuotesProvider;
-	QP.Load = false;
-	QP.Symbol = "000001.SZ";//设置股票代码
-	QP.fields += "highLimit,LowLimit";//属性可增可减，不区分大小写，但需用逗号分隔开来
-	QP.Updated += QP_Updated; //为QuotesProvider绑定更新事件 
-	QP.Load = true;         
+	otk1 = new guosen.OrderTicket;	
+	otk1.Symbol = "000002.SZ";
+	otk1.Quantity = 100;
+	otk1.Account = accID;
+	otk1.Action = OrderAction.Buy;
+	otk1.SymbolType = tsdata.common.SecurityType.Stock;
+	otk1.Type = tsdata.trading.OrderType.Limit;
+	otk1.Duration="GFD";
+	otk1.LimitPrice = 26.28;
+	ord = otk1.Send();
+	ord.Updated += ord_Updated;
 end;
 
-Method void QP_Updated(elsystem.Object sender,tsdata.marketdata.QuoteUpdatedEventArgs args)
+Method void ord_Updated(elsystem.Object sender,guosen.OrderUpdatedEventArgs args)
 Begin
-	if(QP.State=DataState.loaded)then
-	Begin
-		Print("HighLimit: "+ numtostr(QP.Quote["HighLimit"].Int64Value,0) + //代码名称
-			 " LowLimit:" + numtostr(QP.Quote["HighLimit"].Int64Value,0)  //最新价
-			 );
-	End;
+	print(DateTime.Now.ToString()+ "," +args.OrderID.ToString()+","+args.State.ToString()+",成交均价："+numtostr(args.Order.AvgFilledPrice,2));
 End;
-//打印语句输出栏结果示例：HighLimit: 100900 LowLimit:100900
+
+//打印语句输出栏结果示例：
+//2016/12/5 16:42:32,,sending,成交均价：0.00
+//2016/12/5 16:42:32,0-_410-0381-2205-9_20-1612-05_1-0403-6257,queued,成交均价：0.00
+//2016/12/5 16:42:32,0-_410-0381-2205-9_20-1612-05_1-0403-6257,received,成交均价：0.00
+//2016/12/5 16:42:32,0-_410-0381-2205-9_20-1612-05_1-0403-6257,partiallyfilled,成交均价：26.28
+//2016/12/5 16:42:32,0-_410-0381-2205-9_20-1612-05_1-0403-6257,filled,成交均价：26.28
+
 
 </pre>
 

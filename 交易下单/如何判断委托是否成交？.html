@@ -1,0 +1,118 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+	<title>如何判断委托是否成交？-交易下单-国信证券TradeStation帮助文档</title>
+    <script type="text/javascript" src="../scripts/shCore.js"></script>
+	<script type="text/javascript" src="../scripts/shBrushEL.js"></script>
+	<link type="text/css" rel="stylesheet" href="../styles/shCoreDefault.css"/>
+    <script type="text/javascript">SyntaxHighlighter.all();</script>
+	<link href="../交易下单/styles.css" rel=stylesheet type="text/css">
+</head>
+<body>
+<div style="width:1000px;margin: 0 auto;">
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" bgcolor="#0062a6">
+  <tr>
+    <td width=5 height=5><IMG src="../images/tmenu/lt.gif" width=5 height=5></td>
+    <td></td>
+    <td><IMG src="../images/tmenu/rt.gif" width=5 height=5></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td valign="middle"><table width="100%"  border="0" cellspacing="0" cellpadding="5">
+      <tr valign="middle">
+        <td style="COLOR: #ffffff"><p style="COLOR: #ffffff; TEXT-ALIGN: justify; MARGIN-TOP: 0px">交易下单</p></td>
+				<td width="70" align="right">
+				<A href="#"><IMG border=0 alt=上一页 src="../images/previous.gif" width=17 height=17></a>
+				
+				<A href="#"><IMG border=0 alt=下一页 src="../images/next.gif" width=17 height=17></a>
+				</td>
+      </tr>
+    </table></td>
+    <td width=5></td>
+  </tr>
+  <tr>
+    <td width=5 height=5><IMG src="../images/tmenu/lb.gif" width=5 height=5></td>
+    <td></td>
+    <td width=5 height=5><IMG src="../images/tmenu/rb.gif" width=5 height=5></td>
+  </tr>
+</table>
+<div class=longtext>
+<h1>如何判断委托是否成交？</h1>
+<pre>&nbsp;</pre>
+
+<div width=50%>
+
+<p>
+使用保留字buy、sell等发送的订单不能再代码中获得其状态信息，只能在交易管理器中查看该条委托的详细状态。使用OrderTicket发送的委托可以通过查看Order对象的状态确认订单的执行情况，也即看委托是否成交，成交了多少。具体方法见示例。
+</p>
+
+</div>
+
+
+<h2>示例1:使用Order查看委托的执行和成交状态</h2>
+<pre class="brush: EasyLanguage;">
+using guosen;
+using elsystem;
+using tsdata.common;
+using tsdata.marketdata;
+
+vars:
+	guosen.OrderTicket otk1(null),
+	guosen.Order ord(null), 
+	string accID("410038122059");
+
+method void AnalysisTechnique_Initialized( elsystem.Object sender, elsystem.InitializedEventArgs args ) 
+begin
+	otk1 = new guosen.OrderTicket;	
+	otk1.Symbol = "000002.SZ";
+	otk1.Quantity = 100;
+	otk1.Account = accID;
+	otk1.Action = OrderAction.Buy;
+	otk1.SymbolType = tsdata.common.SecurityType.Stock;
+	otk1.Type = tsdata.trading.OrderType.Limit;
+	otk1.Duration="GFD";
+	otk1.BypassClientValidation = true;
+	otk1.LimitPrice = 26.28;
+	ord = otk1.Send();
+	ord.Updated += ord_Updated;
+end;
+
+Method void ord_Updated(elsystem.Object sender,guosen.OrderUpdatedEventArgs args)
+vars:Order od;
+Begin
+	od = sender astype Order;
+	print(DateTime.Now.ToString()+ "," 
+        +args.OrderID.ToString()+","
+        +args.State.ToString()+","
+        +od.StateDetail.ToString()+","
+        +"输入数量："+numtostr(od.EnteredQuantity,0)+","
+        +"已成交数量:"+numtostr(od.FilledQuantity,0)+","
+        +"输入时间："+od.EnteredTime.ToString()+","
+        +"成交时间："+od.FilledTime.ToString());
+	if(od.State = OrderState.Filled)then
+	Begin
+		print("OK.I'm filled....");
+	End;
+End;
+
+//打印语句输出栏结果示例：
+//2016/12/5 14:33:10,0-_410-0381-2205-9_20-1612-05_1-0405-1228,queued,queued,输入数量：100,已成交数量:0,输入时间：2016/12/5 14:33:09,成交时间：
+//2016/12/5 14:33:10,0-_410-0381-2205-9_20-1612-05_1-0405-1228,received,received,输入数量：100,已成交数量:0,输入时间：2016/12/5 14:33:09,成交时间：
+//2016/12/5 14:33:10,0-_410-0381-2205-9_20-1612-05_1-0405-1228,filled,filled,输入数量：100,已成交数量:100,输入时间：2016/12/5 14:33:09,成交时间：2016/12/5 14:33:09
+//OK.I'm filled....
+
+
+</pre>
+
+<h2>附件</h2>
+
+<pre>无
+</pre>
+</div>
+
+<div>
+	<p align="left">Copyright  1998-2016 国信证券股份有限公司 版权所有</p>
+</div>
+</div>
+</body>
+</html>

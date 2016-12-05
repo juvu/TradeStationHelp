@@ -1,0 +1,142 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+	<title>如何获取当前仓位中的所有证券代码？-交易下单-国信证券TradeStation帮助文档</title>
+    <script type="text/javascript" src="../scripts/shCore.js"></script>
+	<script type="text/javascript" src="../scripts/shBrushEL.js"></script>
+	<link type="text/css" rel="stylesheet" href="../styles/shCoreDefault.css"/>
+    <script type="text/javascript">SyntaxHighlighter.all();</script>
+	<link href="../交易下单/styles.css" rel=stylesheet type="text/css">
+</head>
+<body>
+<div style="width:1000px;margin: 0 auto;">
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" bgcolor="#0062a6">
+  <tr>
+    <td width=5 height=5><IMG src="../images/tmenu/lt.gif" width=5 height=5></td>
+    <td></td>
+    <td><IMG src="../images/tmenu/rt.gif" width=5 height=5></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td valign="middle"><table width="100%"  border="0" cellspacing="0" cellpadding="5">
+      <tr valign="middle">
+        <td style="COLOR: #ffffff"><p style="COLOR: #ffffff; TEXT-ALIGN: justify; MARGIN-TOP: 0px">交易下单</p></td>
+				<td width="70" align="right">
+				<A href="#"><IMG border=0 alt=上一页 src="../images/previous.gif" width=17 height=17></a>
+				
+				<A href="#"><IMG border=0 alt=下一页 src="../images/next.gif" width=17 height=17></a>
+				</td>
+      </tr>
+    </table></td>
+    <td width=5></td>
+  </tr>
+  <tr>
+    <td width=5 height=5><IMG src="../images/tmenu/lb.gif" width=5 height=5></td>
+    <td></td>
+    <td width=5 height=5><IMG src="../images/tmenu/rb.gif" width=5 height=5></td>
+  </tr>
+</table>
+<div class=longtext>
+<h1>如何获取当前仓位中的所有证券代码？</h1>
+<pre>&nbsp;</pre>
+
+<div width=50%>
+
+<p>
+使用PositionsProvider可以获得当前账户下的所有持仓信息，当然也包括持仓的证券代码等。其获取过程如下所示：
+</p>
+
+</div>
+
+
+<h2>示例1:使用PositionsProvider查询资金账户的仓位信息</h2>
+<pre class="brush: EasyLanguage;">
+using guosen;
+using tsdata.marketdata;
+using tsdata.common;
+using elsystem;
+vars:
+PositionsProvider PP(null),
+IntrabarPersist int count(0);
+
+method void AnalysisTechnique_Initialized( elsystem.Object sender, elsystem.InitializedEventArgs args ) 
+begin
+	PP = new PositionsProvider;
+	PP.Realtime = True;
+	PP.Load = TRUE;
+	pp.StateChanged += pp_StateChanged;
+end;
+
+Method void pp_StateChanged(Object sender,StateChangedEventArgs args)
+vars:int loop;
+Begin
+	if(PP.State = DataState.loaded)then
+	Begin
+		For loop = 0 to PP.Count-1
+		Begin
+			print(PosToString(PP[loop]));
+		End;
+	End;
+End;
+
+Method string ifff(Object obj,string aa,string bb)
+Begin
+	if(obj = null)then
+	Begin
+		Return aa;
+	End
+	Else
+	Begin
+		Return bb;
+	End;
+End;
+
+Method string PosToString(Position po)
+vars:string str;
+Begin
+	str = DateTime.Now.ToString();
+	str = str + " , 资金账号:" +  po.AccountID.ToString();
+	str = str + " , 均价:" +  numtostr(po.AveragePrice ,2) ;
+	str = str + " , 合约到期时间:" +  po.ContractExpirationDate.ToString() ;
+	str = str + " , 融券到期时间：" +  numtostr(po.MarginExpirationDate ,2) ;
+	str = str + " , 市值：" +  numtostr(po.MarketValue ,2) ;
+	str = str + " , 浮动盈亏：" +  numtostr(po.OpenPL ,2) ;
+	str = str + " , 初始成本：" +  numtostr(po.OriginalCost ,2) ;
+	str = str + " , 盈亏百分比：" +  numtostr(po.PercentPL ,2) ;
+	str = str + " , 平均浮动盈亏：" +  numtostr(po.PLPerQuantity ,2) ;
+	str = str + " , 持仓ID：" +  po.PositionID;
+	str = str + " , 代码：" +  po.Symbol;
+	str = str + " , 代码类型：" +  po.SymbolType.ToString();
+	str = str + " , 总成本：" +  numtostr(po.TotalCost,2);
+	str = str + " , 持仓类型：" +  po.Type.ToString();
+	str = str + " , 数量：" +  numtostr(po.Quantity ,2) ;
+	str = str + " , 可用数量：" +  numtostr(po.QuantityAvailable ,2) ;
+	Return str;
+End;
+
+
+//打印语句输出栏结果示例:
+//2016/12/5 16:33:39 , 资金账号:410038122059 , 均价:26.25 , 合约到期时间: , 融券到期时间：242518856.00 , 市值：164475.00 , 浮动盈亏：-4843.95 , 初始成本：26.25 , 盈亏百分比：-2.86 , 平均浮动盈亏：-0.75 , 持仓ID：SL410038122059000002.SZ , 代码：000002.SZ , 代码类型：stock , 总成本：169318.95 , 持仓类型：longposition , 数量：6450.00 , 可用数量：0.00
+//2016/12/5 16:33:39 , 资金账号:410038122059 , 均价:0.00 , 合约到期时间: , 融券到期时间：242518808.00 , 市值：7305.00 , 浮动盈亏：7305.00 , 初始成本：0.00 , 盈亏百分比：0.00 , 平均浮动盈亏：14.61 , 持仓ID：SL410038122059600004.SH , 代码：600004.SH , 代码类型：stock , 总成本：0.00 , 持仓类型：longposition , 数量：500.00 , 可用数量：500.00
+//2016/12/5 16:33:39 , 资金账号:410038122059 , 均价:5.45 , 合约到期时间: , 融券到期时间：242518856.00 , 市值：85183.00 , 浮动盈亏：3130.40 , 初始成本：5.45 , 盈亏百分比：3.82 , 平均浮动盈亏：0.21 , 持仓ID：SL410038122059600023.SH , 代码：600023.SH , 代码类型：stock , 总成本：82052.60 , 持仓类型：longposition , 数量：15050.00 , 可用数量：15050.00
+//2016/12/5 16:33:39 , 资金账号:410038122059 , 均价:14.32 , 合约到期时间: , 融券到期时间：242518808.00 , 市值：3390.00 , 浮动盈亏：-3768.00 , 初始成本：14.32 , 盈亏百分比：-52.64 , 平均浮动盈亏：-7.54 , 持仓ID：SL410038122059600050.SH , 代码：600050.SH , 代码类型：stock , 总成本：7158.00 , 持仓类型：longposition , 数量：500.00 , 可用数量：500.00
+//2016/12/5 16:33:39 , 资金账号:410038122059 , 均价:6.73 , 合约到期时间: , 融券到期时间：242518856.00 , 市值：32130.00 , 浮动盈亏：1845.00 , 初始成本：6.73 , 盈亏百分比：6.09 , 平均浮动盈亏：0.41 , 持仓ID：SL410038122059601985.SH , 代码：601985.SH , 代码类型：stock , 总成本：30285.00 , 持仓类型：longposition , 数量：4500.00 , 可用数量：4500.00
+//2016/12/5 16:33:39 , 资金账号:410038122059 , 均价:3.29 , 合约到期时间: , 融券到期时间：242518808.00 , 市值：77220.00 , 浮动盈亏：4730.00 , 初始成本：3.29 , 盈亏百分比：6.53 , 平均浮动盈亏：0.21 , 持仓ID：SL410038122059601988.SH , 代码：601988.SH , 代码类型：stock , 总成本：72490.00 , 持仓类型：longposition , 数量：22000.00 , 可用数量：22000.00
+//2016/12/5 16:33:39 , 资金账号:410038122059 , 均价:7.43 , 合约到期时间: , 融券到期时间：242518856.00 , 市值：40535.00 , 浮动盈亏：-330.00 , 初始成本：7.43 , 盈亏百分比：-0.81 , 平均浮动盈亏：-0.06 , 持仓ID：SL410038122059601989.SH , 代码：601989.SH , 代码类型：stock , 总成本：40865.00 , 持仓类型：longposition , 数量：5500.00 , 可用数量：5500.00
+//2016/12/5 16:33:39 , 资金账号:410038122059 , 均价:0.00 , 合约到期时间: , 融券到期时间：242518808.00 , 市值：16320.00 , 浮动盈亏：16320.00 , 初始成本：0.00 , 盈亏百分比：0.00 , 平均浮动盈亏：32.64 , 持仓ID：SL410038122059603589.SH , 代码：603589.SH , 代码类型：stock , 总成本：0.00 , 持仓类型：longposition , 数量：500.00 , 可用数量：500.00
+
+
+</pre>
+
+<h2>附件</h2>
+
+<pre>无
+</pre>
+</div>
+
+<div>
+	<p align="left">Copyright  1998-2016 国信证券股份有限公司 版权所有</p>
+</div>
+</div>
+</body>
+</html>
