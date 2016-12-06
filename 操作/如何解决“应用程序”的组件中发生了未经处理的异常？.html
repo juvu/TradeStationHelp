@@ -1,7 +1,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
-	<title>如何使用雷达屏实时监控并实时下单？-策略和APP-国信证券TradeStation帮助文档</title>
+	<title>如何获得涨停跌停价？-操作-国信证券TradeStation帮助文档</title>
     <script type="text/javascript" src="../scripts/shCore.js"></script>
 	<script type="text/javascript" src="../scripts/shBrushEL.js"></script>
 	<link type="text/css" rel="stylesheet" href="../styles/shCoreDefault.css"/>
@@ -20,7 +20,7 @@
     <td></td>
     <td valign="middle"><table width="100%"  border="0" cellspacing="0" cellpadding="5">
       <tr valign="middle">
-        <td style="COLOR: #ffffff"><p style="COLOR: #ffffff; TEXT-ALIGN: justify; MARGIN-TOP: 0px">策略和APP</p></td>
+        <td style="COLOR: #ffffff"><p style="COLOR: #ffffff; TEXT-ALIGN: justify; MARGIN-TOP: 0px">操作</p></td>
 				<td width="70" align="right">
 				<A href="#"><IMG border=0 alt=上一页 src="../images/previous.gif" width=17 height=17></a>
 				
@@ -37,60 +37,33 @@
   </tr>
 </table>
 <div class=longtext>
-<h1>如何使用雷达屏实时监控并实时下单？</h1>
+<h1>如何解决"应用程序"的组件中发生了未经处理的异常？</h1>
 <pre>&nbsp;</pre>
 
 <div width=50%>
 
 <p>
-雷达屏中可以插入指标，但是不能使用保留字buy、sell等，所以只能在指标中使用OrderTicket在产生交易信号的时候发送委托。
+EasyLanguage中包含PriceSeriesProvider、QuotesProvider、FundamentalQuotesProvider等在内的Provider对象（组件）的加载过程都是异步的（与之对应的是堵塞的），也就是说当使用Provider.Load = True之后，主程序会继续执行，而不会等待Provider加载完数据。Provider会在另外一个后台线程中加载数据，当Provider数据更新的时候可以触发Updated事件，当Provider的加载状态发生变化时会出发StateChanged事件。那么如果设置一个Provider.Load = True之后立即访问该集合中的数据就会因为数据尚未加载完全就尝试去访问的错误。为了避免这个错误，就一定要在访问数据前判断是否provider的状态已经是Loaded的。也即 if(provider.State = DataState.Loaded)。此外，对于一些异常的处理需要用try-catch -End代码块捕获到异常，并进行相应的处理。
 </p>
 
 </div>
 
 
-<h2>示例1:使用OrderTicket在指标中发送委托</h2>
-<p>注意：无须为指标绑定AnalysisTechnique_Initialized主函数事件</p>
+<h2>示例1:使用try-catch-End代码块捕获异常</h2>
 <pre class="brush: EasyLanguage;">
-using guosen;
-using elsystem;
-using tsdata.common;
-using tsdata.marketdata;
-
-vars:
-	guosen.OrderTicket otk1(null),
-	guosen.Order ord(null), 
-	string accID("410038122059");
-
-method void sendOrder(string acct) 
+method void AnalysisTechnique_Initialized( elsystem.Object sender, elsystem.InitializedEventArgs args ) 
+vars:int rs,double divide;
 begin
-	otk1 = new guosen.OrderTicket;	
-	otk1.Symbol = "000002.SZ";
-	otk1.Quantity = 12100;
-	otk1.Account = acct;
-	otk1.Action = OrderAction.Buy;
-	otk1.SymbolType = tsdata.common.SecurityType.Stock;
-	otk1.Type = tsdata.trading.OrderType.Limit;
-	otk1.Duration="GFD";
-	otk1.LimitPrice = 26.28;
-	ord = otk1.Send();//发单
-	ord.Updated += ord_Updated;
-	ord.Cancel();//撤单
+	divide = 0;
+	Try
+		rs = 12/divide; //但是0 不能作为除数，故而会抛出异常
+	catch(elsystem.Exception ex)
+		print(ex.Message); //处理异常，打印出异常的消息提示
+	End;	
 end;
 
-Method void ord_Updated(elsystem.Object sender,guosen.OrderUpdatedEventArgs args)
-Begin
-	print(DateTime.Now.ToString()+ "," +args.OrderID.ToString()+","+args.State.ToString()+","+ args.Order.StateDetail.ToString()+","+args.Message);
-End;
-
-if(Close > highest(close[1],10))then
-Begin
-	plot1(True);
-	sendOrder(accID);
-End;
 //打印语句输出栏结果示例：
-
-
+//EXCEPTION_FLT_DIVIDE_BY_ZERO
 </pre>
 
 <h2>附件</h2>

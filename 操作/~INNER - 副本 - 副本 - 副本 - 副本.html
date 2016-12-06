@@ -1,7 +1,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
-	<title>如何使用雷达屏实时监控并实时下单？-策略和APP-国信证券TradeStation帮助文档</title>
+	<title>如何获得涨停跌停价？-操作-国信证券TradeStation帮助文档</title>
     <script type="text/javascript" src="../scripts/shCore.js"></script>
 	<script type="text/javascript" src="../scripts/shBrushEL.js"></script>
 	<link type="text/css" rel="stylesheet" href="../styles/shCoreDefault.css"/>
@@ -20,7 +20,7 @@
     <td></td>
     <td valign="middle"><table width="100%"  border="0" cellspacing="0" cellpadding="5">
       <tr valign="middle">
-        <td style="COLOR: #ffffff"><p style="COLOR: #ffffff; TEXT-ALIGN: justify; MARGIN-TOP: 0px">策略和APP</p></td>
+        <td style="COLOR: #ffffff"><p style="COLOR: #ffffff; TEXT-ALIGN: justify; MARGIN-TOP: 0px">操作</p></td>
 				<td width="70" align="right">
 				<A href="#"><IMG border=0 alt=上一页 src="../images/previous.gif" width=17 height=17></a>
 				
@@ -37,59 +37,48 @@
   </tr>
 </table>
 <div class=longtext>
-<h1>如何使用雷达屏实时监控并实时下单？</h1>
+<h1>如何获得涨停跌停价？</h1>
 <pre>&nbsp;</pre>
 
 <div width=50%>
 
 <p>
-雷达屏中可以插入指标，但是不能使用保留字buy、sell等，所以只能在指标中使用OrderTicket在产生交易信号的时候发送委托。
+使用保留字（Reserve Word）不能直接获得涨停价或跌停价。
+国信TradeStation提供QuotesProvider在EasyLanguage中获取代码的涨停价和跌停价。
+具体用法见示例。
 </p>
 
 </div>
 
 
-<h2>示例1:使用OrderTicket在指标中发送委托</h2>
-<p>注意：无须为指标绑定AnalysisTechnique_Initialized主函数事件</p>
+<h2>示例1:使用QuotesProvider获得涨停价或跌停价</h2>
 <pre class="brush: EasyLanguage;">
 using guosen;
-using elsystem;
 using tsdata.common;
 using tsdata.marketdata;
 
-vars:
-	guosen.OrderTicket otk1(null),
-	guosen.Order ord(null), 
-	string accID("410038122059");
 
-method void sendOrder(string acct) 
+vars:QuotesProvider QP(null);
+method void AnalysisTechnique_Initialized( elsystem.Object sender, elsystem.InitializedEventArgs args ) 
 begin
-	otk1 = new guosen.OrderTicket;	
-	otk1.Symbol = "000002.SZ";
-	otk1.Quantity = 12100;
-	otk1.Account = acct;
-	otk1.Action = OrderAction.Buy;
-	otk1.SymbolType = tsdata.common.SecurityType.Stock;
-	otk1.Type = tsdata.trading.OrderType.Limit;
-	otk1.Duration="GFD";
-	otk1.LimitPrice = 26.28;
-	ord = otk1.Send();//发单
-	ord.Updated += ord_Updated;
-	ord.Cancel();//撤单
+	QP = new QuotesProvider;
+	QP.Load = false;
+	QP.Symbol = "000001.SZ";//设置股票代码
+	QP.fields += "highLimit,LowLimit";//属性可增可减，不区分大小写，但需用逗号分隔开来
+	QP.Updated += QP_Updated; //为QuotesProvider绑定更新事件 
+	QP.Load = true;         
 end;
 
-Method void ord_Updated(elsystem.Object sender,guosen.OrderUpdatedEventArgs args)
+Method void QP_Updated(elsystem.Object sender,tsdata.marketdata.QuoteUpdatedEventArgs args)
 Begin
-	print(DateTime.Now.ToString()+ "," +args.OrderID.ToString()+","+args.State.ToString()+","+ args.Order.StateDetail.ToString()+","+args.Message);
+	if(QP.State=DataState.loaded)then
+	Begin
+		Print("HighLimit: "+ numtostr(QP.Quote["HighLimit"].Int64Value,0) + //代码名称
+			 " LowLimit:" + numtostr(QP.Quote["HighLimit"].Int64Value,0)  //最新价
+			 );
+	End;
 End;
-
-if(Close > highest(close[1],10))then
-Begin
-	plot1(True);
-	sendOrder(accID);
-End;
-//打印语句输出栏结果示例：
-
+//打印语句输出栏结果示例：HighLimit: 100900 LowLimit:100900
 
 </pre>
 

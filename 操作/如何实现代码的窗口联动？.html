@@ -1,7 +1,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
-	<title>如何获得涨停跌停价？-策略和APP-国信证券TradeStation帮助文档</title>
+	<title>如何实现代码的窗口联动？-操作-国信证券TradeStation帮助文档</title>
     <script type="text/javascript" src="../scripts/shCore.js"></script>
 	<script type="text/javascript" src="../scripts/shBrushEL.js"></script>
 	<link type="text/css" rel="stylesheet" href="../styles/shCoreDefault.css"/>
@@ -20,7 +20,7 @@
     <td></td>
     <td valign="middle"><table width="100%"  border="0" cellspacing="0" cellpadding="5">
       <tr valign="middle">
-        <td style="COLOR: #ffffff"><p style="COLOR: #ffffff; TEXT-ALIGN: justify; MARGIN-TOP: 0px">策略和APP</p></td>
+        <td style="COLOR: #ffffff"><p style="COLOR: #ffffff; TEXT-ALIGN: justify; MARGIN-TOP: 0px">操作</p></td>
 				<td width="70" align="right">
 				<A href="#"><IMG border=0 alt=上一页 src="../images/previous.gif" width=17 height=17></a>
 				
@@ -37,51 +37,27 @@
   </tr>
 </table>
 <div class=longtext>
-<h1>如何获得涨停跌停价？</h1>
+<h1>如何实现代码的窗口联动？</h1>
 <pre>&nbsp;</pre>
 
 <div width=50%>
 
 <p>
-使用保留字（Reserve Word）不能直接获得涨停价或跌停价。
-国信TradeStation提供QuotesProvider在EasyLanguage中获取代码的涨停价和跌停价。
-具体用法见示例。
+代码的窗口联动指的是多个窗口的股票代码保持一致，当一个窗口的股票代码发生变化时，与之联动的窗口的代码也会发生相应的变化。TradeStation平台的内部窗口（图形分析、交易管理器等）支持代码的联动。
+</p>
+<p>
+具体方法是：点击右上角的S下拉栏，选择相应的颜色，那么具有相同颜色的窗口的股票代码将会联动。
 </p>
 
 </div>
 
 
-<h2>示例1:使用QuotesProvider获得涨停价或跌停价</h2>
+<h2></h2>
+<!--
 <pre class="brush: EasyLanguage;">
-using guosen;
-using tsdata.common;
-using tsdata.marketdata;
-
-
-vars:QuotesProvider QP(null);
-method void AnalysisTechnique_Initialized( elsystem.Object sender, elsystem.InitializedEventArgs args ) 
-begin
-	QP = new QuotesProvider;
-	QP.Load = false;
-	QP.Symbol = "000001.SZ";//设置股票代码
-	QP.fields += "highLimit,LowLimit";//属性可增可减，不区分大小写，但需用逗号分隔开来
-	QP.Updated += QP_Updated; //为QuotesProvider绑定更新事件 
-	QP.Load = true;         
-end;
-
-Method void QP_Updated(elsystem.Object sender,tsdata.marketdata.QuoteUpdatedEventArgs args)
-Begin
-	if(QP.State=DataState.loaded)then
-	Begin
-		Print("HighLimit: "+ numtostr(QP.Quote["HighLimit"].Int64Value,0) + //代码名称
-			 " LowLimit:" + numtostr(QP.Quote["HighLimit"].Int64Value,0)  //最新价
-			 );
-	End;
-End;
-//打印语句输出栏结果示例：HighLimit: 100900 LowLimit:100900
 
 </pre>
-
+-->
 <h2>附件</h2>
 
 <pre>无

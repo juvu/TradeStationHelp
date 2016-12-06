@@ -1,0 +1,111 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+	<title>如何在程序中增加一个定时器轮询？-操作-国信证券TradeStation帮助文档</title>
+    <script type="text/javascript" src="../scripts/shCore.js"></script>
+	<script type="text/javascript" src="../scripts/shBrushEL.js"></script>
+	<link type="text/css" rel="stylesheet" href="../styles/shCoreDefault.css"/>
+    <script type="text/javascript">SyntaxHighlighter.all();</script>
+	<link href="../styles.css" rel=stylesheet type="text/css">
+</head>
+<body>
+<div style="width:1000px;margin: 0 auto;">
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" bgcolor="#0062a6">
+  <tr>
+    <td width=5 height=5><IMG src="../images/tmenu/lt.gif" width=5 height=5></td>
+    <td></td>
+    <td><IMG src="../images/tmenu/rt.gif" width=5 height=5></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td valign="middle"><table width="100%"  border="0" cellspacing="0" cellpadding="5">
+      <tr valign="middle">
+        <td style="COLOR: #ffffff"><p style="COLOR: #ffffff; TEXT-ALIGN: justify; MARGIN-TOP: 0px">操作</p></td>
+				<td width="70" align="right">
+				<A href="#"><IMG border=0 alt=上一页 src="../images/previous.gif" width=17 height=17></a>
+				
+				<A href="#"><IMG border=0 alt=下一页 src="../images/next.gif" width=17 height=17></a>
+				</td>
+      </tr>
+    </table></td>
+    <td width=5></td>
+  </tr>
+  <tr>
+    <td width=5 height=5><IMG src="../images/tmenu/lb.gif" width=5 height=5></td>
+    <td></td>
+    <td width=5 height=5><IMG src="../images/tmenu/rb.gif" width=5 height=5></td>
+  </tr>
+</table>
+<div class=longtext>
+<h1>如何在程序中增加一个定时器轮询？</h1>
+<pre>&nbsp;</pre>
+
+<div width=50%>
+
+<p>
+EasyLanguage中提供Timer（定时器）可以每隔特定的时间执行一次特定的代码，对于某些操作来说，这是一个很有用的工具，如：每30秒检查一次委托中尚未成交的委托并撤单等。
+</p>
+
+</div>
+
+
+<h2>示例1:使用Timer定时检查委托状态</h2>
+<pre class="brush: EasyLanguage;">
+using guosen;
+using elsystem;
+using tsdata.common; 
+using tsdata.marketdata;
+using elsystem.collections;
+ 
+vars:
+	Timer timer1(null),
+    guosen.OrderTicket otk1(null),
+    guosen.Order ord(null),
+    string accID("410038122059");//根据情况修改Account ID
+ 
+method void AnalysisTechnique_Initialized( elsystem.Object sender, elsystem.InitializedEventArgs args ) 
+begin
+	timer1 = new Timer;
+	timer1.Interval = 3000;//Timer的间隔为3000毫秒，也即3秒
+	timer1.Elapsed += timer1_Elapsed;
+	timer1.Enable = true;
+	
+    otk1 = new guosen.OrderTicket;  
+    otk1.Symbol = "000002.SZ";
+    otk1.Quantity = 100;
+    otk1.BypassClientValidation = True;//跳过本地验证
+    otk1.Account = accID;
+    otk1.Action = OrderAction.Buy;
+    otk1.SymbolType = tsdata.common.SecurityType.Stock;
+    otk1.Type = tsdata.trading.OrderType.Market;//市价单
+    otk1.Duration="AUT";//自动选择期限
+    otk1.ExtendedProperties.SetItem("OrderName", "customOrderIDxxxxxxxx");//自定义的OrderName
+    ord = otk1.Send();//发送委托
+    
+end;
+
+Method void timer1_Elapsed(elsystem.Object sender,elsystem.TimerElapsedEventArgs args)
+Begin
+	print(DateTime.Now.ToString()+" Timer Elapsed. " + "OrderState:"+ord.State.ToString());
+End;
+
+//打印语句输出栏结果示例：
+//2016/12/6 15:52:49 Timer Elapsed. OrderState:filled
+//2016/12/6 15:52:52 Timer Elapsed. OrderState:filled
+//2016/12/6 15:52:55 Timer Elapsed. OrderState:filled
+//2016/12/6 15:52:58 Timer Elapsed. OrderState:filled
+
+</pre>
+
+<h2>附件</h2>
+
+<pre>无
+</pre>
+</div>
+
+<div>
+	<p align="left">Copyright  1998-2016 国信证券股份有限公司 版权所有</p>
+</div>
+</div>
+</body>
+</html>

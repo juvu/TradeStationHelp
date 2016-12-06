@@ -1,0 +1,142 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+	<title>如何读取配置和保存配置？-策略和APP-国信证券TradeStation帮助文档</title>
+    <script type="text/javascript" src="../scripts/shCore.js"></script>
+	<script type="text/javascript" src="../scripts/shBrushEL.js"></script>
+	<link type="text/css" rel="stylesheet" href="../styles/shCoreDefault.css"/>
+    <script type="text/javascript">SyntaxHighlighter.all();</script>
+	<link href="../styles.css" rel=stylesheet type="text/css">
+</head>
+<body>
+<div style="width:1000px;margin: 0 auto;">
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" bgcolor="#0062a6">
+  <tr>
+    <td width=5 height=5><IMG src="../images/tmenu/lt.gif" width=5 height=5></td>
+    <td></td>
+    <td><IMG src="../images/tmenu/rt.gif" width=5 height=5></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td valign="middle"><table width="100%"  border="0" cellspacing="0" cellpadding="5">
+      <tr valign="middle">
+        <td style="COLOR: #ffffff"><p style="COLOR: #ffffff; TEXT-ALIGN: justify; MARGIN-TOP: 0px">策略和APP</p></td>
+				<td width="70" align="right">
+				<A href="#"><IMG border=0 alt=上一页 src="../images/previous.gif" width=17 height=17></a>
+				
+				<A href="#"><IMG border=0 alt=下一页 src="../images/next.gif" width=17 height=17></a>
+				</td>
+      </tr>
+    </table></td>
+    <td width=5></td>
+  </tr>
+  <tr>
+    <td width=5 height=5><IMG src="../images/tmenu/lb.gif" width=5 height=5></td>
+    <td></td>
+    <td width=5 height=5><IMG src="../images/tmenu/rb.gif" width=5 height=5></td>
+  </tr>
+</table>
+<div class=longtext>
+<h1>如何读取配置和保存配置？</h1>
+<pre>&nbsp;</pre>
+
+<div width=50%>
+
+<p>
+虽然TradeStation提供全局字典可以在不同APP、策略之间共享键值对，但是这些共享的属性在平台关闭后会被释放。一般而言，保存配置与读取配置的过程只不过是将配置信息在保存时写入到文件，在读取时是从该文件中读取配置信息。
+</p>
+
+</div>
+
+
+<h2>示例1:使用文件保存配置信息</h2>
+<pre class="brush: EasyLanguage;">
+using guosen;
+using elsystem.io;
+using elsystem.collections;
+
+vars:string ConfigPath("");
+method void AnalysisTechnique_Initialized( elsystem.Object sender, elsystem.InitializedEventArgs args ) 
+vars:int loop,Vector vec;
+begin
+	ConfigPath = elsystem.Environment.GetMyWorkDirectory()+"configure_test.txt";
+	print("ConfigPath is: "+ ConfigPath);
+	vec = ReadConfig(ConfigPath); //
+	if(vec=null)then
+	Begin
+		print("Read configure error.");
+	End
+	Else
+	Begin
+		for loop = 0 to vec.Count-1
+		Begin
+			print("Config"+numtostr(loop+1,0)+":"+vec[loop].ToString());
+		End;
+	End;	
+end;
+
+
+method void AnalysisTechnique_UnInitialized( elsystem.Object sender, elsystem.UnInitializedEventArgs args ) 
+begin
+	SaveConfig(ConfigPath);
+end;
+
+//从path读取配置文件
+Method vector ReadConfig(string path)
+vars:StreamReader sr,string line,vector vec_config;
+Begin
+	vec_config = new Vector;
+	Try
+		sr = StreamReader.Create(path); //创建读入流
+		line = sr.ReadLine(); //读取一行
+		if(line.Trim().Equals(""))then
+		Begin
+			print("File content is empty");//读取的文本为空字符串
+			return null;
+		End
+		Else
+			vec_config = line.Split(","); //以逗号为分隔拆分
+		Return vec_config;
+	catch(elsystem.Exception ex)
+		print("File read exception. Not found or locked.");
+		Return null;
+	End;
+End;
+
+//保存配置信息到path
+Method void SaveConfig(string path)
+vars:StreamWriter sw,string configure;
+Begin
+	configure = "I'm configure.," + elsystem.DateTime.Now.ToString(); //自定义的配置文件信: config,DateTime
+	Try
+		sw = StreamWriter.Create(path);//创建写入流
+		sw.Write(configure);
+		if(sw<>null)then
+		Begin
+			sw.Close();//关闭写入流
+		End;
+	catch(elsystem.Exception ex)
+		print("Configure save failed.");
+	End;
+End;
+//打印语句输出栏结果示例
+//2016/12/6 13:22:53 Config saved.
+//ConfigPath is: C:\Program Files (x86)\TradeStation 9.5\MyWork\configure_test.txt
+//Config1:I'm configure.
+//Config2:2016/12/6 13:22:53
+
+
+</pre>
+
+<h2>附件</h2>
+
+<pre>无
+</pre>
+</div>
+
+<div>
+	<p align="left">Copyright  1998-2016 国信证券股份有限公司 版权所有</p>
+</div>
+</div>
+</body>
+</html>
