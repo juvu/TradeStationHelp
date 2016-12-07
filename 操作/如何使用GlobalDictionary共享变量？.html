@@ -1,0 +1,125 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+	<title>如何使用GlobalDictionary共享变量？-操作-国信证券TradeStation帮助文档</title>
+    <script type="text/javascript" src="../scripts/shCore.js"></script>
+	<script type="text/javascript" src="../scripts/shBrushEL.js"></script>
+	<link type="text/css" rel="stylesheet" href="../styles/shCoreDefault.css"/>
+    <script type="text/javascript">SyntaxHighlighter.all();</script>
+	<link href="../styles.css" rel=stylesheet type="text/css">
+</head>
+<body>
+<div style="width:1000px;margin: 0 auto;">
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" bgcolor="#0062a6">
+  <tr>
+    <td width=5 height=5><IMG src="../images/tmenu/lt.gif" width=5 height=5></td>
+    <td></td>
+    <td><IMG src="../images/tmenu/rt.gif" width=5 height=5></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td valign="middle"><table width="100%"  border="0" cellspacing="0" cellpadding="5">
+      <tr valign="middle">
+        <td style="COLOR: #ffffff"><p style="COLOR: #ffffff; TEXT-ALIGN: justify; MARGIN-TOP: 0px">操作</p></td>
+				<td width="70" align="right">
+				<A href="#"><IMG border=0 alt=上一页 src="../images/previous.gif" width=17 height=17></a>
+				
+				<A href="#"><IMG border=0 alt=下一页 src="../images/next.gif" width=17 height=17></a>
+				</td>
+      </tr>
+    </table></td>
+    <td width=5></td>
+  </tr>
+  <tr>
+    <td width=5 height=5><IMG src="../images/tmenu/lb.gif" width=5 height=5></td>
+    <td></td>
+    <td width=5 height=5><IMG src="../images/tmenu/rb.gif" width=5 height=5></td>
+  </tr>
+</table>
+<div class=longtext>
+<h1>如何使用GlobalDictionary共享变量？</h1>
+<pre>&nbsp;</pre>
+
+<div width=50%>
+
+<p>
+TradeStation提供了名为GlobalDictionary的全局字典，供平台内的指标、策略、Trading APP之间共享键值对的集合。
+</p>
+<pre>
+创建 GlobalDictionary 实例，在相同的窗口类型内共享值：
+myGlobal = GlobalDictionary.create(); 
+
+创建 GlobalDictionary 的实例，在相同的窗口类型以外共享值：
+myGlobal = GlobalDictionary.create(true, "share_name"); 
+
+使用 Add(sKey, oValue) 方法将元素添加到全球字典，其中 sKey 是一个包含键名的字符串，oValue 是要存储的值。
+
+使用 Remove(sKey) 方法从全球字典删除元素（键和值）。Contains(sKey) 方法用于确定元素键是否存在于字典中。
+
+</pre>
+
+</div>
+
+
+<h2>示例1:使用GlobalDictionary共享键值对</h2>
+<p>新建两个APP，代码分别为APP1和APP2，先后打开APP1和APP2，即可在EL打印输出栏查看内容。(注意：验证之前为APP绑定AnalysisTechnique_Initialized事件)
+</p>
+<p>App1:
+</p>
+<pre class="brush: EasyLanguage;">
+using guosen;
+using elsystem.collections;
+
+vars:GlobalDictionary myGlobal(null);
+method void AnalysisTechnique_Initialized( elsystem.Object sender, elsystem.InitializedEventArgs args ) 
+begin
+	myGlobal = new GlobalDictionary(true,"GDname");
+	if(myGlobal.Contains("keyTest"))then
+	Begin
+		myGlobal["keyTest"] = "ValueChanged";
+		print("Infor from GD1: Exsiting keyTest value has been changed to ValueChanged");
+	End
+	Else
+	Begin
+		myGlobal.Add("keyTest","valueTest");
+		print("Infor from GD1: keyTest added with key:keyTest and value:valueTest.");
+	End;
+	
+end;
+</pre>
+
+<p>App2:
+</p>
+<pre class="brush: EasyLanguage;">
+using guosen;
+using elsystem.collections;
+
+vars:GlobalDictionary myGlobal(null);
+method void AnalysisTechnique_Initialized( elsystem.Object sender, elsystem.InitializedEventArgs args ) 
+begin
+	myGlobal = new GlobalDictionary(true,"GDname");
+	if(myGlobal.Contains("keyTest"))then
+	Begin
+		print("Infor from GD2: key keyTest in GD is : "+ myGlobal["keyTest"].ToString());
+	End
+	Else
+	Begin
+		print("Infor from GD2: Key keyTest not found in GD."); 
+	End;
+end;
+
+
+</pre>
+
+<h2>附件</h2>
+
+<pre>无
+</pre>
+</div>
+
+<div>
+	<p align="left">Copyright  1998-2016 国信证券股份有限公司 版权所有</p>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,63 @@
+Instructions for Using the Custom Index Indicator
+=================================================
+
+To create a simple chart of the index, please follow these steps:
+
+
+1)  Import the indicator named "Custom Index Indicator (PSP) v. 2" from the ELD file.
+
+2)  Place the file IWPSP.txt in your C:\ root directory.  Open the file and modify the symbols that it contains.  Use symbols to which you have access through your data feed.  The weights (1.000) can be left as 1.000 for now.
+
+3)  Create a 5-min chart of a very liquid symbol going back a few days.
+
+4)  Format the symbol on the chart so that it plots in a hidden subgraph (Format Symbol dialog box, Scaling tab).
+
+5)  Apply the indicator to the chart.  It will plot the index.
+
+
+-----------------
+
+
+To change the symbols used to construct the index, you can modify the file named IWPSP.txt.
+
+The format of this file is as follows:
+
+Symbol1, Weight1
+Symbol2, Weight2
+Symbol3, Weight3...
+
+
+You can use as many symbols as desired in the construction of the index.
+
+If you modify the file, be sure to save the changes.
+
+Once your changes are saved, reload the index indicator on the chart (Ctrl-R) so that it will recalculate.  When it recalculates it will use the new file.
+
+
+-----------------
+ 
+
+To change the bar interval that is used in construction of the index, simply format the chart and change the interval of the chart's hidden symbol (Format Symbol dialog box, General tab).
+
+
+-----------------
+
+
+To plot an indicator on the chart of the index, you will have to change some settings of the indicator.
+
+If the indicator would normally plot in the same subgraph as prices (example: a moving average) then the indicator must be formatted so as to scale on the right axis, rather than on the same axis as the underlying data.  Be sure also that the indicator is formatted to plot in subgraph 1 (Format Indicator dialog box, Scaling tab).
+
+You can then use one of the new index functions as the price input to the indicator.  For example, you can set the Price input to CloseCI_PSP( "C:\IWPSP.txt" ) by formatting the indicator.
+
+
+
+
+
+
+
+
+
+
+
+
+

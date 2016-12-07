@@ -1,7 +1,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
-	<title>如何配置声音提示？-操作-国信证券TradeStation帮助文档</title>
+	<title>如何写一个函数或一个方法？-操作-国信证券TradeStation帮助文档</title>
     <script type="text/javascript" src="../scripts/shCore.js"></script>
 	<script type="text/javascript" src="../scripts/shBrushEL.js"></script>
 	<link type="text/css" rel="stylesheet" href="../styles/shCoreDefault.css"/>
@@ -37,24 +37,54 @@
   </tr>
 </table>
 <div class=longtext>
-<h1>如何配置声音提示？</h1>
+<h1>如何写一个函数或一个方法？</h1>
 <pre>&nbsp;</pre>
 
 <div width=50%>
 
 <p>
-TradeStation下单后，委托的发送、成交、拒绝都会有声音提示，对于不需要或想要修改提示音的用户，可以通过右键点击系统右下角的托盘，然后点击打开TradeStation信息中心，点击标题栏左数第三个图标打开通知默认选项即可修改提示音频、视频、甚至是配置发送电子邮件提醒。
+对于比较复杂的操作或者可以提取出来复用的代码可以抽取成一个方法（函数）。方法皆以Method 开头， 其后跟返回值的类型（void表示无返回值）+ 函数名 + 参数类型及名称（参数在括号内，多个参数以逗号分隔），
+并且然后在Begin 和End 块之间为函数的内容。
 </p>
 
 </div>
 
 
-<h2></h2>
-<!--
+<h2>示例1:函数示例</h2>
 <pre class="brush: EasyLanguage;">
+Method String OrderStateParse(OrderState odState)
+Begin
+	Switch(odState)
+	Begin
+		Case OrderState.Canceled:
+			Return "已取消";
+		Case OrderState.Expired:
+			Return "已过期";
+		Case OrderState.Filled:
+			Return "完全成交";
+		Case OrderState.PartiallyFilled:
+			Return "部分成交";
+		Case OrderState.PartiallyFilledUROut:
+			Return "部成撤单";
+		Case OrderState.Queued:
+			Return "队列中";
+		Case OrderState.Received:
+			Return "已接收";
+		Case OrderState.Rejected:
+			Return "已拒绝";
+		Case OrderState.SendFailed:
+			Return "发送失败";
+		Case OrderState.Sending:
+			Return "发送中";
+		Case OrderState.Unsent:
+			Return "未发送";
+		Default:
+			Return odState.ToString();
+	End;
+End;
 
 </pre>
--->
+
 <h2>附件</h2>
 
 <pre>无

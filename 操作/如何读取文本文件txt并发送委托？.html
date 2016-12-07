@@ -1,7 +1,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
-	<title>如何将代码批量导入到雷达屏？-操作-国信证券TradeStation帮助文档</title>
+	<title>如何读取文本文件txt并发送委托？-操作-国信证券TradeStation帮助文档</title>
     <script type="text/javascript" src="../scripts/shCore.js"></script>
 	<script type="text/javascript" src="../scripts/shBrushEL.js"></script>
 	<link type="text/css" rel="stylesheet" href="../styles/shCoreDefault.css"/>
@@ -37,19 +37,21 @@
   </tr>
 </table>
 <div class=longtext>
-<h1>如何将代码批量导入到雷达屏？</h1>
+<h1>如何读取文本文件txt并发送委托？</h1>
 <pre>&nbsp;</pre>
 
 <div width=50%>
 
 <p>
-将股票代码批量导入到雷达屏可以通过EasyLanguage实现。首先，用StreamReader读取文件获得股票代码列表，然后用宏命令启动一个新的雷达屏并依此插入代码到雷达屏上。宏命令的指令列表见 TradeStation-帮助-TradeStation平台帮助-TradeStation桌面-命令行-命令行参考（所有命令）中查看。
+使用保留字（Reserve Word）不能直接获得涨停价或跌停价。
+国信TradeStation提供QuotesProvider在EasyLanguage中获取代码的涨停价和跌停价。
+具体用法见示例。
 </p>
 
 </div>
 
 
-<h2>示例1:使用EasyLanguage将代码批量插入到雷达屏上</h2>
+<h2>示例1:使用QuotesProvider获得涨停价或跌停价</h2>
 <pre class="brush: EasyLanguage;">
 using guosen;
 using elsystem;
@@ -58,21 +60,17 @@ using tsdata.marketdata;
 using elsystem.collections;
 using elsystem.io;
  
+vars:string accID("410038122059");//根据情况修改Account ID
 method void AnalysisTechnique_Initialized( elsystem.Object sender, elsystem.InitializedEventArgs args )
-vars:Vector vec_Symbols,int loop;
+vars:int loop;
 begin
-    vec_Symbols = ReadFile("D:\symbols.txt");
-    Runcommand(".NRS");
-    for loop = 0 to vec_Symbols.Count-1
-    Begin
-    	Runcommand(".ISY " + vec_Symbols[loop].ToString());
-    End;
+    ReadFile("D:\orders.txt");
 end;
 
 
 
-//从path读取股票代码列表，文件格式为每行一个股票代码
-Method vector ReadFile(string path)
+//从path读取股票代码列表，文件格式为每行: 股票代码,数量,BuyOrSell,LimitPrice,并下单
+Method void ReadFile(string path)
 vars:StreamReader sr,string line,vector vec,bool isEnd;
 Begin
 	isEnd = false;
@@ -82,52 +80,65 @@ Begin
 		while(true)
 		Begin
 			line = sr.ReadLine(); //读取一行
+			vec.Clear();
 			if(line.Trim().Equals(""))then
 			Begin
 				print("Read to end.");//读取的文本为空字符串
 				break;
 			End
 			Else
-				vec.Push_Back(line); //以逗号为分隔拆分
+			Begin
+				vec = line.split(",");
+				if(vec.Count = 5)then
+				Begin
+					sendOrder(vec);
+				End;
+			End;
 		End;
-		Return vec;
 	catch(elsystem.Exception ex)
 		print("File read exception. Not found or locked.");
-		Return null;
 	End;
 End;
 
+//第一个参数是代码，第二个参数是数量，第三个参数是买卖方向，第四个参数是委托类型，第五个参数是委托价格
+Method void sendOrder(Vector vec)
+vars:OrderTicket otk1;
+Begin
+	otk1 = new OrderTicket;
+    otk1.Symbol = vec[0].ToString(); //代码
+    otk1.Quantity = strtonum(vec[1].ToString()); //数量
+    otk1.BypassClientValidation = True;//跳过本地验证
+    otk1.Account = accID; 
+    if(vec[2].ToString().toLower().Equals("buy"))then
+    Begin
+    	otk1.Action = OrderAction.Buy;
+    End
+    Else
+    Begin
+    	otk1.Action = OrderAction.Sell;
+    End;
+    otk1.SymbolType = tsdata.common.SecurityType.Stock; //代码类型
+    if(vec[3].ToString().toLower().Equals("market"))then
+    Begin
+    	otk1.Type = tsdata.trading.OrderType.Market;//市价单
+    End
+    else
+	Begin
+		otk1.Type = tsdata.trading.OrderType.Limit;//限价单
+	End;
+	otk1.LimitPrice = strtonum(vec[4].ToString());
+    otk1.Duration="AUT";//自动选择期限
+    otk1.ExtendedProperties.SetItem("OrderName", "customOrderIDxxxxxxxx");//自定义的OrderName
+    otk1.Send();//发送委托
+End;
 </pre>
-<h2>Symbols.txt 文件格式如下</h2>
-<pre>
-603003.SH
-603005.SH
-603006.SH
-603008.SH
-603009.SH
-603010.SH
-603011.SH
-603012.SH
-603015.SH
-603017.SH
-603018.SH
-603019.SH
-603020.SH
-603021.SH
-603022.SH
-603023.SH
-603025.SH
-603026.SH
-603027.SH
-603030.SH
-603031.SH
-603066.SH
-603077.SH
-603085.SH
-603088.SH
-603099.SH
-603100.SH
+<p>
+"D:\orders.txt" 文件格式如下：
+</p>
 
+<pre>
+600023.SH,200,buy,market,0
+600023.SH,200,buy,limit,5.6
 </pre>
 <h2>附件</h2>
 

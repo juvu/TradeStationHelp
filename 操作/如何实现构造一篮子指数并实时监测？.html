@@ -1,7 +1,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
-	<title>如何配置声音提示？-操作-国信证券TradeStation帮助文档</title>
+	<title>如何实现构造一篮子指数并实时监测？-操作-国信证券TradeStation帮助文档</title>
     <script type="text/javascript" src="../scripts/shCore.js"></script>
 	<script type="text/javascript" src="../scripts/shBrushEL.js"></script>
 	<link type="text/css" rel="stylesheet" href="../styles/shCoreDefault.css"/>
@@ -37,27 +37,35 @@
   </tr>
 </table>
 <div class=longtext>
-<h1>如何配置声音提示？</h1>
+<h1>如何实现构造一篮子指数并实时监测？</h1>
 <pre>&nbsp;</pre>
 
 <div width=50%>
 
 <p>
-TradeStation下单后，委托的发送、成交、拒绝都会有声音提示，对于不需要或想要修改提示音的用户，可以通过右键点击系统右下角的托盘，然后点击打开TradeStation信息中心，点击标题栏左数第三个图标打开通知默认选项即可修改提示音频、视频、甚至是配置发送电子邮件提醒。
+根据自定义的权重和股票代码列表可以实现构造出自定义的指数，从而查看自定义指数的历史走势并进行回测。有几种方式：
 </p>
-
+<p>
+第一种方式：在图形分析的子图上插入成分股的股票代码，并调整周期至所期望的周期。新建一个指标，Plot出各个子图收盘价的加权和，也即自定义的指数并验证该指标。在任意代码的主图中插入该指标，并隐藏原主图的K线图，只显示该指标，即可通过图形分析查看自定义指数的走势。
+</p>
+<p>
+第二种方式：使用多个PriceSeriesProvider（每个成分股各一个）加载各个成分股的历史数据，并在指标中求出对齐时间的加权和插入到主图上即可。
+</p>
 </div>
 
 
 <h2></h2>
 <!--
 <pre class="brush: EasyLanguage;">
-
 </pre>
 -->
-<h2>附件</h2>
 
-<pre>无
+<h2>附件</h2>
+<p>
+<a href="attachment/Custom index Indicator and functions.ELD">[1].Custom index Indicator and functions.eld</a><br>
+<a href="attachment/Custom Index Indicator Instructions.txt">[1].Custom Index Indicator Instructions.txt</a>
+</p>
+<pre>
 </pre>
 </div>
 

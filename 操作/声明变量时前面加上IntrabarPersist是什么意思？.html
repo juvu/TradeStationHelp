@@ -1,7 +1,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
-	<title>如何配置声音提示？-操作-国信证券TradeStation帮助文档</title>
+	<title>声明变量时前面加上IntrabarPersist是什么意思？-操作-国信证券TradeStation帮助文档</title>
     <script type="text/javascript" src="../scripts/shCore.js"></script>
 	<script type="text/javascript" src="../scripts/shBrushEL.js"></script>
 	<link type="text/css" rel="stylesheet" href="../styles/shCoreDefault.css"/>
@@ -37,14 +37,21 @@
   </tr>
 </table>
 <div class=longtext>
-<h1>如何配置声音提示？</h1>
+<h1>声明变量时前面加上IntrabarPersist是什么意思？</h1>
 <pre>&nbsp;</pre>
 
 <div width=50%>
 
 <p>
-TradeStation下单后，委托的发送、成交、拒绝都会有声音提示，对于不需要或想要修改提示音的用户，可以通过右键点击系统右下角的托盘，然后点击打开TradeStation信息中心，点击标题栏左数第三个图标打开通知默认选项即可修改提示音频、视频、甚至是配置发送电子邮件提醒。
+在声明一个变量（或数组）时使用该保留字，它指示每个交易点上可更新的变量（或数组元素）值，也即在Bar未结束的时候也会更新值。默认情况下，变量或数组元素的值在每个柱状线结束时才会更新。该字表示变量或数组元素的值要在柱状线内更新。
 </p>
+<p>
+一般而言，当遇到将某个变量赋值之后，但是在接下来的一条语句中打印出来仍然是旧值，可能是因为变量声明之前没有加IntrabarPersist导致的。
+</p>
+<pre class="brush: EasyLanguage;">
+Var : intrabarpersist double CodeNum (0);
+Var : intrabarpersist bool   isColse (false);
+</pre>
 
 </div>
 
@@ -52,7 +59,6 @@ TradeStation下单后，委托的发送、成交、拒绝都会有声音提示，对于不需要或想要修改提
 <h2></h2>
 <!--
 <pre class="brush: EasyLanguage;">
-
 </pre>
 -->
 <h2>附件</h2>

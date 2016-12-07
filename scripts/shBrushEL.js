@@ -185,7 +185,7 @@
 		 'Using V Value Variable VARSIZE VARSTARTADDR '+
 		 'VEGA VOID Volume VSBCOMMENTARY VWAP Was '+
 		 'Wednesday While White WORD Xor Year '+
-		 'YearFromDateTime Yellow Yesterday';
+		 'YearFromDateTime Yellow Yesterday var vars';
 		var functions = '@Delta @Gamma @Theta @Vega AB_AddCellRange '+
 		'AB_AverageCells AB_AveragePrice AB_CellCount AB_Median AB_Mode AB_NextColor '+
 		'AB_NextLabel AB_RowHeightCalc AB_StdDev AbsoluteBreadth AccumDist AccumSwingIndex '+

@@ -1,7 +1,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
-	<title>如何获得涨停跌停价？-操作-国信证券TradeStation帮助文档</title>
+	<title>如何记录数据或日志到文件？-操作-国信证券TradeStation帮助文档</title>
     <script type="text/javascript" src="../scripts/shCore.js"></script>
 	<script type="text/javascript" src="../scripts/shBrushEL.js"></script>
 	<link type="text/css" rel="stylesheet" href="../styles/shCoreDefault.css"/>
@@ -37,49 +37,29 @@
   </tr>
 </table>
 <div class=longtext>
-<h1>如何获得涨停跌停价？</h1>
+<h1>如何记录数据或日志到文件？</h1>
 <pre>&nbsp;</pre>
 
 <div width=50%>
 
 <p>
-使用保留字（Reserve Word）不能直接获得涨停价或跌停价。
-国信TradeStation提供QuotesProvider在EasyLanguage中获取代码的涨停价和跌停价。
-具体用法见示例。
+将信息发送到用户指定的现有 ASCII 文件，并将这些信息添加到该文件底部。
+
+FileAppend("str_Filename", "str_Text") ; 
+
+其中，str_Filename string 表达式是想要附加文本 string 的现有 ASCII 文本文件的路径和文件名。路径和文件名应使用引号括起来。
+
+str_Text 是需要附加到文件的 string 表达式。
+
 </p>
 
 </div>
 
 
-<h2>示例1:使用QuotesProvider获得涨停价或跌停价</h2>
+<h2></h2>
+
 <pre class="brush: EasyLanguage;">
-using guosen;
-using tsdata.common;
-using tsdata.marketdata;
-
-
-vars:QuotesProvider QP(null);
-method void AnalysisTechnique_Initialized( elsystem.Object sender, elsystem.InitializedEventArgs args ) 
-begin
-	QP = new QuotesProvider;
-	QP.Load = false;
-	QP.Symbol = "000001.SZ";//设置股票代码
-	QP.fields += "highLimit,LowLimit";//属性可增可减，不区分大小写，但需用逗号分隔开来
-	QP.Updated += QP_Updated; //为QuotesProvider绑定更新事件 
-	QP.Load = true;         
-end;
-
-Method void QP_Updated(elsystem.Object sender,tsdata.marketdata.QuoteUpdatedEventArgs args)
-Begin
-	if(QP.State=DataState.loaded)then
-	Begin
-		Print("HighLimit: "+ numtostr(QP.Quote["HighLimit"].Int64Value,0) + //代码名称
-			 " LowLimit:" + numtostr(QP.Quote["HighLimit"].Int64Value,0)  //最新价
-			 );
-	End;
-End;
-//打印语句输出栏结果示例：HighLimit: 100900 LowLimit:100900
-
+FileAppend("c:\mydata.txt", "This symbol gapped up on " + NumToStr(Date, 0) + NewLine);
 </pre>
 
 <h2>附件</h2>
